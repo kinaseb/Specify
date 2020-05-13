@@ -326,8 +326,12 @@ if (app.documents.length > 0) {
     }
     customUnitsInput.onChange = function () {
         restoreDefaultsButton.enabled = true;
+    };
+    customUnitsInput.onDeactivate = function () {
+        customUnitsInput.text = customUnitsInput.text.replace(/\s+/g, ''); // trim input text
         customUnitsInput.text = customUnitsInput.text.replace(/[^ a-zA-Z]/g, "");
     };
+
 
     // DECIMALPLACESGROUP
     // ==================
@@ -370,8 +374,8 @@ if (app.documents.length > 0) {
         restoreDefaultsButton.enabled = true;
     }
     fontSizeInput.onDeactivate = function () {
-        // If first character is decimal point, don't error, but instead
-        // add leading zero to string.
+        fontSizeInput.text = fontSizeInput.text.replace(/\s+/g, ''); // trim input text
+        // If first character is decimal point, don't error, but instead add leading zero to string.
         if (fontSizeInput.text.charAt(0) == ".") {
             fontSizeInput.text = "0" + fontSizeInput.text;
             fontSizeInput.active = true;
@@ -422,8 +426,15 @@ if (app.documents.length > 0) {
     gapInput.text = defaultGap;
     gapInput.onChange = function () {
         restoreDefaultsButton.enabled = true;
-        gapInput.text = gapInput.text.replace(/[^0-9\.]/g, "");
     };
+    gapInput.onDeactivate = function () {
+        gapInput.text = gapInput.text.replace(/\s+/g, ''); // trim input text
+        gapInput.text = gapInput.text.replace(/[^0-9\.]/g, "");
+        // If first character is decimal point, don't error, but instead add leading zero to string.
+        if (gapInput.text.charAt(0) == ".") {
+            gapInput.text = "0" + gapInput.text;
+        }
+    }
 
     var gapUnitsLabelText = gapGroup.add("statictext", undefined, undefined, { name: "gapUnitsLabelText" });
     gapUnitsLabelText.text = getRulerUnits();
@@ -446,8 +457,15 @@ if (app.documents.length > 0) {
     strokeWidthInput.text = defaultStrokeWidth;
     strokeWidthInput.onChange = function () {
         restoreDefaultsButton.enabled = true;
-        strokeWidthInput.text = strokeWidthInput.text.replace(/[^0-9\.]/g, "");
     };
+    strokeWidthInput.onDeactivate = function () {
+        strokeWidthInput.text = strokeWidthInput.text.replace(/\s+/g, ''); // trim input text
+        strokeWidthInput.text = strokeWidthInput.text.replace(/[^0-9\.]/g, "");
+        // If first character is decimal point, don't error, but instead add leading zero to string.
+        if (strokeWidthInput.text.charAt(0) == ".") {
+            strokeWidthInput.text = "0" + strokeWidthInput.text;
+        }
+    }
 
     var strokeWidthUnitsLabelText = strokeWidthGroup.add("statictext", undefined, undefined, { name: "strokeWidthUnitsLabelText" });
     strokeWidthUnitsLabelText.text = getRulerUnits();
@@ -470,8 +488,15 @@ if (app.documents.length > 0) {
     headTailSizeInput.text = defaultHeadTailSize;
     headTailSizeInput.onChange = function () {
         restoreDefaultsButton.enabled = true;
-        headTailSizeInput.text = headTailSizeInput.text.replace(/[^0-9\.]/g, "");
     };
+    headTailSizeInput.onDeactivate = function () {
+        headTailSizeInput.text = headTailSizeInput.text.replace(/\s+/g, ''); // trim input text
+        headTailSizeInput.text = headTailSizeInput.text.replace(/[^0-9\.]/g, "");
+        // If first character is decimal point, don't error, but instead add leading zero to string.
+        if (headTailSizeInput.text.charAt(0) == ".") {
+            headTailSizeInput.text = "0" + headTailSizeInput.text;
+        }
+    }
 
     var headTailSizeUnitsLabelText = headTailSizeGroup.add("statictext", undefined, undefined, { name: "headTailSizeUnitsLabelText" });
     headTailSizeUnitsLabelText.text = getRulerUnits();
@@ -553,6 +578,7 @@ if (app.documents.length > 0) {
         customUnitsInput.text = setCustomUnits;
         useCustomUnits.value = false;
         customUnitsInput.enabled = false;
+        restoreDefaultsButton.active = false;
         restoreDefaultsButton.enabled = false;
         // Unset environmental variables
         $.setenv("Specify_defaultUnits", "");
@@ -642,7 +668,6 @@ if (app.documents.length > 0) {
             beep();
             prompt("Open your browser and visit the URL below for more information", url);
         } finally {
-            urlButton.active = true;
             urlButton.active = false;
         }
     };
