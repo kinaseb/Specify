@@ -92,7 +92,7 @@ if (app.documents.length > 0) {
     optionsMainGroup.preferredSize.height = 410;
     optionsMainGroup.orientation = "column";
     optionsMainGroup.alignChildren = ["fill", "top"];
-    optionsMainGroup.spacing = 10;
+    optionsMainGroup.spacing = 15;
     optionsMainGroup.margins = 0;
 
     // DIMENSIONPANEL
@@ -202,7 +202,7 @@ if (app.documents.length > 0) {
     // ==========
     var scalePanel = optionsMainGroup.add("panel", undefined, undefined, { name: "scalePanel" });
     scalePanel.text = "Scale";
-    scalePanel.preferredSize.height = 139;
+    scalePanel.preferredSize.height = 146;
     scalePanel.orientation = "column";
     scalePanel.alignChildren = ["left", "top"];
     scalePanel.spacing = 10;
@@ -286,10 +286,11 @@ if (app.documents.length > 0) {
     var fontLabel = fontGroup.add("statictext", undefined, undefined, { name: "fontLabel" });
     fontLabel.text = "Font size:";
 
-    var fontSizeInput = fontGroup.add('edittext {justify: "center", properties: {name: "fontSizeInput"}}');
+    var fontSizeInput = fontGroup.add('edittext {justify: "right", properties: {name: "fontSizeInput"}}');
     fontSizeInput.helpTip = "Enter the desired font size for the dimension label(s).\nIf value is less than one (e.g. 0.25) you must include a\nleading zero before the decimal point.\n\nDefault: " + setFontSize;
     fontSizeInput.text = defaultFontSize;
     fontSizeInput.characters = 5;
+    fontSizeInput.preferredSize.width = 60;
     // fontSizeInput.preferredSize.width = 35;
     fontSizeInput.onActivate = function () {
         restoreDefaultsButton.enabled = true;
@@ -308,22 +309,22 @@ if (app.documents.length > 0) {
     fontUnitsLabelText.text = "";
     switch (doc.rulerUnits) {
         case RulerUnits.Picas:
-            fontUnitsLabelText = "pc";
+            fontUnitsLabelText.text = "pc";
             break;
         case RulerUnits.Inches:
-            fontUnitsLabelText = "in";
+            fontUnitsLabelText.text = "in";
             break;
         case RulerUnits.Millimeters:
-            fontUnitsLabelText = "mm";
+            fontUnitsLabelText.text = "mm";
             break;
         case RulerUnits.Centimeters:
-            fontUnitsLabelText = "cm";
+            fontUnitsLabelText.text = "cm";
             break;
         case RulerUnits.Pixels:
-            fontUnitsLabelText = "px";
+            fontUnitsLabelText.text = "px";
             break;
         default:
-            fontUnitsLabelText = "pt";
+            fontUnitsLabelText.text = "pt";
     }
 
     // DECIMALPLACESGROUP
@@ -335,11 +336,12 @@ if (app.documents.length > 0) {
     decimalPlacesGroup.margins = 0;
 
     var decimalPlacesLabel = decimalPlacesGroup.add("statictext", undefined, undefined, { name: "decimalPlacesLabel" });
-    decimalPlacesLabel.text = "Num. of decimal places displayed:";
+    decimalPlacesLabel.text = "Decimals:";
 
-    var decimalPlacesInput = decimalPlacesGroup.add('edittext {justify: "center", properties: {name: "decimalPlacesInput"}}');
+    var decimalPlacesInput = decimalPlacesGroup.add('edittext {justify: "right", properties: {name: "decimalPlacesInput"}}');
     decimalPlacesInput.helpTip = "Enter the desired number of decimal places to\ndisplay in the label dimensions.\n\nDefault: " + setDecimals;
-    decimalPlacesInput.characters = 4;
+    decimalPlacesInput.characters = 1;
+    decimalPlacesInput.preferredSize.width = 40;
     decimalPlacesInput.text = defaultDecimals;
     // decimalPlacesInput.preferredSize.width = 30;
     decimalPlacesInput.onActivate = function () {
@@ -362,15 +364,32 @@ if (app.documents.length > 0) {
     units.onClick = function () {
         if (units.value == false) {
             useCustomUnits.value = false;
+            useCustomUnits.enabled = false;
             customUnitsInput.text = getRulerUnits();
             customUnitsInput.enabled = false;
+        } else {
+            useCustomUnits.enabled = true;
         }
     };
 
-    var useCustomUnits = optionsPanel.add("checkbox", undefined, undefined, { name: "useCustomUnits" });
+    // CUSTOMIZEUNITSGROUP
+    // ===================
+    var customizeUnitsGroup = optionsPanel.add("group", undefined, { name: "customizeUnitsGroup" });
+    customizeUnitsGroup.orientation = "row";
+    customizeUnitsGroup.alignChildren = ["left", "center"];
+    customizeUnitsGroup.spacing = 10;
+    customizeUnitsGroup.margins = 0;
+
+    var useCustomUnits = customizeUnitsGroup.add("checkbox", undefined, undefined, { name: "useCustomUnits" });
     useCustomUnits.helpTip = "When checked, allows user to customize\nthe text of the units label.\nExample: ft";
     useCustomUnits.text = "Customize Units Label";
     useCustomUnits.value = defaultUseCustomUnits;
+    if (units.value == false) {
+        useCustomUnits.value = false;
+        useCustomUnits.enabled = false;
+    } else {
+        useCustomUnits.enabled = true;
+    }
     useCustomUnits.onClick = function () {
         if (useCustomUnits.value == true) {
             customUnitsInput.enabled = true;
@@ -380,24 +399,17 @@ if (app.documents.length > 0) {
         }
     };
 
-    // CUSTOMUNITSGROUP
-    // ================
-    var customUnitsGroup = optionsPanel.add("group", undefined, { name: "customUnitsGroup" });
-    customUnitsGroup.orientation = "row";
-    customUnitsGroup.alignChildren = ["left", "center"];
-    customUnitsGroup.spacing = 10;
-    customUnitsGroup.margins = 0;
-
-    var customUnitsLabel = customUnitsGroup.add("statictext", undefined, undefined, { name: "customUnitsLabel" });
-    customUnitsLabel.text = "Custom Units Label:";
-
-    var customUnitsInput = customUnitsGroup.add('edittext {properties: {name: "customUnitsInput", readonly: true}}');
-    customUnitsInput.enabled = false;
+    var customUnitsInput = customizeUnitsGroup.add('edittext {properties: {name: "customUnitsInput"}}');
     customUnitsInput.helpTip = "Enter the string to display after the dimension\nnumber when using a custom scale.\n\nDefault: " + setCustomUnits;
     customUnitsInput.text = defaultCustomUnits;
-    // customUnitsInput.preferredSize.width = 70;
     customUnitsInput.enabled = defaultUseCustomUnits;
     customUnitsInput.characters = 20;
+    customUnitsInput.preferredSize.width = 120;
+    if (useCustomUnits.value == true) {
+        customUnitsInput.enabled = true;
+    } else {
+        customUnitsInput.enabled = false;
+    }
     customUnitsInput.onChange = function () {
         restoreDefaultsButton.enabled = true;
         infoText.enabled = true;
@@ -452,7 +464,7 @@ if (app.documents.length > 0) {
         }
     }
 
-    verticalTabbedPanel_nav.selection = 0; // Activate first tab
+    verticalTabbedPanel_nav.selection = 0; // Activate Options tab
     showTab_verticalTabbedPanel()
 
     // DEFAULTSPANEL
@@ -474,7 +486,7 @@ if (app.documents.length > 0) {
     restoreDefaultsGroup.margins = 0;
 
     var infoText = restoreDefaultsGroup.add("statictext", undefined, undefined, { name: "infoText" });
-    infoText.text = "Options are persistent until application is closed.";
+    infoText.text = "Options are persistent until application is closed";
 
     var restoreDefaultsButton = restoreDefaultsGroup.add("button", undefined, undefined, { name: "restoreDefaultsButton" });
     restoreDefaultsButton.text = "Restore All Defaults";
@@ -488,9 +500,9 @@ if (app.documents.length > 0) {
     function restoreDefaults() {
         units.value = setUnits;
         fontSizeInput.text = setFontSize;
-        colorInputRed.text = setRed;
-        colorInputGreen.text = setGreen;
-        colorInputBlue.text = setBlue;
+        // colorInputRed.text = setRed;
+        // colorInputGreen.text = setGreen;
+        // colorInputBlue.text = setBlue;
         decimalPlacesInput.text = setDecimals;
         customScaleDropdown.selection = setScale;
         customUnitsInput.text = setCustomUnits;
@@ -507,6 +519,11 @@ if (app.documents.length > 0) {
         $.setenv("Specify_defaultScale", "");
         $.setenv("Specify_defaultUseCustomUnits", "");
         $.setenv("Specify_defaultCustomUnits", "");
+
+        verticalTabbedPanel_nav.selection = 0; // Activate Options tab
+
+        beep();
+        alert('The default options and styles have been restored');
     };
 
     // FOOTERGROUP
@@ -530,7 +547,8 @@ if (app.documents.length > 0) {
 
     var urlButton = updatesGroup.add("button", undefined, undefined, {name: "urlButton"});
     urlButton.text = "https://github.com/adamdehaven/Specify";
-    urlButton.alignment = ["center","center"];
+    urlButton.justify = "left";
+    urlButton.alignment = ["left","center"];
     urlButton.onClick = function () {
         openURL(urlButton.text);
     };
@@ -570,15 +588,10 @@ if (app.documents.length > 0) {
     // ===========
     var buttonGroup = footerGroup.add("group", undefined, { name: "buttonGroup" });
     buttonGroup.orientation = "row";
-    buttonGroup.alignChildren = ["right", "center"];
+    buttonGroup.alignChildren = ["left", "bottom"];
     buttonGroup.spacing = 10;
-    buttonGroup.margins = 0;
-
-    var cancelButton = buttonGroup.add("button", undefined, undefined, { name: "cancelButton" });
-    cancelButton.text = "Cancel";
-    cancelButton.onClick = function () {
-        specifyDialogBox.close();
-    };
+    buttonGroup.margins = [40, 0, 0, 0];
+    buttonGroup.alignment = ["left", "bottom"];
 
     var specifyButton = buttonGroup.add("button", undefined, undefined, { name: "specifyButton" });
     specifyButton.text = "Specify Object(s)";
@@ -671,19 +684,23 @@ if (app.documents.length > 0) {
             // Close dialog
             specifyDialogBox.close();
         } else if (!top && !left && !right && !bottom) {
+            verticalTabbedPanel_nav.selection = 0; // Activate Options tab
             beep();
             alert("Please select at least 1 dimension to draw.");
         } else if (!validFontSize) {
+            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
             // If fontSizeInput.text does not match regex
             beep();
             alert("Please enter a valid font size. \n0.002 - 999.999");
             fontSizeInput.active = true;
             fontSizeInput.text = setFontSize;
         } else if (parseFloat(fontSizeInput.text, 10) <= 0.001) {
+            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
             beep();
             alert("Font size must be greater than 0.001.");
             fontSizeInput.active = true;
         } /*else if (!validRedColor || !validGreenColor || !validBlueColor) {
+            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
             // If RGB inputs are not numeric
             beep();
             alert("Please enter a valid RGB color.");
@@ -692,6 +709,7 @@ if (app.documents.length > 0) {
             colorInputGreen.text = defaultColorGreen;
             colorInputBlue.text = defaultColorBlue;
         }*/ else if (!validDecimalPlaces) {
+            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
             // If decimalPlacesInput.text is not numeric
             beep();
             alert("Decimal places must range from 0 - 4.");
