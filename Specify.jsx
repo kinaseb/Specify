@@ -46,6 +46,9 @@ if (app.documents.length > 0) {
     // Custom Units
     var setCustomUnits = getRulerUnits();
     var defaultCustomUnits = $.getenv("Specify_defaultCustomUnits") ? $.getenv("Specify_defaultCustomUnits") : setCustomUnits;
+    // Gap
+    var setGap = 4;
+    var defaultGap = $.getenv("Specify_defaultGap") ? $.getenv("Specify_defaultGap") : setGap;
 
     // =========================================================================================== //
     // Create Dialog
@@ -234,18 +237,9 @@ if (app.documents.length > 0) {
 
     var customScaleDropdown = customScaleGroup.add("dropdownlist", undefined, undefined, { name: "customScaleDropdown", items: customScaleDropdown_array });
     customScaleDropdown.helpTip = "Choose the scale of the artwork/document.\n\nExample: Choosing '1/4' will indicate the artwork is drawn at\none-fourth scale, resulting in dimension values that are 4x their\ndrawn dimensions.\n\nDefault: 1/1";
-    // for (var n = 1; n <= 30; n++) {
-    //     if (n == 1) {
-    //         customScaleDropdown.add("item", "1/" + n + "    (Default)");
-    //         customScaleDropdown.add("separator");
-    //     } else {
-    //         customScaleDropdown.add("item", "1/" + n);
-    //     }
-    // }
     customScaleDropdown.selection = defaultScale;
     customScaleDropdown.onChange = function () {
         restoreDefaultsButton.enabled = true;
-        infoText.enabled = true;
     };
 
     // SCALEPANEL
@@ -291,10 +285,8 @@ if (app.documents.length > 0) {
     fontSizeInput.text = defaultFontSize;
     fontSizeInput.characters = 5;
     fontSizeInput.preferredSize.width = 60;
-    // fontSizeInput.preferredSize.width = 35;
     fontSizeInput.onActivate = function () {
         restoreDefaultsButton.enabled = true;
-        infoText.enabled = true;
     }
     fontSizeInput.onDeactivate = function () {
         // If first character is decimal point, don't error, but instead
@@ -343,14 +335,57 @@ if (app.documents.length > 0) {
     decimalPlacesInput.characters = 1;
     decimalPlacesInput.preferredSize.width = 40;
     decimalPlacesInput.text = defaultDecimals;
-    // decimalPlacesInput.preferredSize.width = 30;
     decimalPlacesInput.onActivate = function () {
         restoreDefaultsButton.enabled = true;
-        infoText.enabled = true;
     };
     decimalPlacesInput.onChange = function () {
         decimalPlacesInput.text = decimalPlacesInput.text.replace(/[^0-9]/g, "");
     };
+
+    // GAPGROUP
+    // ========
+    var gapGroup = optionsPanel.add("group", undefined, { name: "gapGroup" });
+    gapGroup.orientation = "row";
+    gapGroup.alignChildren = ["left", "center"];
+    gapGroup.spacing = 10;
+    gapGroup.margins = 0;
+
+    var gapLabel = gapGroup.add("statictext", undefined, undefined, { name: "gapLabel" });
+    gapLabel.text = "Gap size:";
+
+    var gapInput = gapGroup.add('edittext {justify: "right", properties: {name: "gapInput"}}');
+    gapInput.helpTip = "Enter the desired gap size between the dimension label(s) and the object.\n\nDefault: " + setGap;
+    gapInput.characters = 6;
+    gapInput.preferredSize.width = 60;
+    gapInput.text = defaultGap;
+    gapInput.onActivate = function () {
+        restoreDefaultsButton.enabled = true;
+    };
+    gapInput.onChange = function () {
+        gapInput.text = gapInput.text.replace(/[^0-9]/g, "");
+    };
+
+    var gapUnitsLabelText = gapGroup.add("statictext", undefined, undefined, { name: "gapUnitsLabelText" });
+    gapUnitsLabelText.text = "";
+    switch (doc.rulerUnits) {
+        case RulerUnits.Picas:
+            gapUnitsLabelText.text = "pc";
+            break;
+        case RulerUnits.Inches:
+            gapUnitsLabelText.text = "in";
+            break;
+        case RulerUnits.Millimeters:
+            gapUnitsLabelText.text = "mm";
+            break;
+        case RulerUnits.Centimeters:
+            gapUnitsLabelText.text = "cm";
+            break;
+        case RulerUnits.Pixels:
+            gapUnitsLabelText.text = "px";
+            break;
+        default:
+            gapUnitsLabelText.text = "pt";
+    }
 
     // OPTIONSPANEL
     // ============
@@ -412,7 +447,6 @@ if (app.documents.length > 0) {
     }
     customUnitsInput.onChange = function () {
         restoreDefaultsButton.enabled = true;
-        infoText.enabled = true;
         customUnitsInput.text = customUnitsInput.text.replace(/[^ a-zA-Z]/g, "");
     };
 
@@ -504,6 +538,7 @@ if (app.documents.length > 0) {
         // colorInputGreen.text = setGreen;
         // colorInputBlue.text = setBlue;
         decimalPlacesInput.text = setDecimals;
+        gapInput.text = setGap;
         customScaleDropdown.selection = setScale;
         customUnitsInput.text = setCustomUnits;
         useCustomUnits.value = false;
@@ -516,6 +551,7 @@ if (app.documents.length > 0) {
         $.setenv("Specify_defaultColorGreen", "");
         $.setenv("Specify_defaultColorBlue", "");
         $.setenv("Specify_defaultDecimals", "");
+        $.setenv("Specify_defaultGap", "")
         $.setenv("Specify_defaultScale", "");
         $.setenv("Specify_defaultUseCustomUnits", "");
         $.setenv("Specify_defaultCustomUnits", "");
@@ -624,7 +660,7 @@ if (app.documents.length > 0) {
     var scale;
 
     // Gap between measurement lines and object
-    var gap = 4;
+    var gap;
 
     // Size of perpendicular measurement lines.
     var size = 6;
@@ -673,6 +709,14 @@ if (app.documents.length > 0) {
             $.setenv("Specify_defaultDecimals", decimals);
         }
 
+        var validGap = /^([0-9]{1}(\.\d{1,4})?|[1-9]{1}[0-9]{4})$/.test(gapInput.text); // Allows for 0 to 9999.9999
+        if (validGap) {
+            // Gap size
+            gap = gapInput.text;
+            // Set environmental variable
+            $.setenv("Specify_defaultGap", gap);
+        }
+
         var theScale = parseInt(customScaleDropdown.selection.toString().replace(/1\//g, "").replace(/[^0-9]/g, ""));
         scale = theScale;
         // Set environmental variable
@@ -715,6 +759,13 @@ if (app.documents.length > 0) {
             alert("Decimal places must range from 0 - 4.");
             decimalPlacesInput.active = true;
             decimalPlacesInput.text = setDecimals;
+        } else if (!validGap) {
+            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
+            // If gapInput.text does not match regex 0 to 9999.9999
+            beep();
+            alert("Gap size must be in the range from 0 to 9999.9999");
+            gapInput.active = true;
+            gapInput.text = setGap;
         } else if (selectedItems == 2 && between.value) {
             if (top) specDouble(objectsToSpec[0], objectsToSpec[1], "Top");
             if (left) specDouble(objectsToSpec[0], objectsToSpec[1], "Left");
