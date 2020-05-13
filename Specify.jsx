@@ -298,26 +298,7 @@ if (app.documents.length > 0) {
     }
 
     var fontUnitsLabelText = fontGroup.add("statictext", undefined, undefined, { name: "fontUnitsLabelText" });
-    fontUnitsLabelText.text = "";
-    switch (doc.rulerUnits) {
-        case RulerUnits.Picas:
-            fontUnitsLabelText.text = "pc";
-            break;
-        case RulerUnits.Inches:
-            fontUnitsLabelText.text = "in";
-            break;
-        case RulerUnits.Millimeters:
-            fontUnitsLabelText.text = "mm";
-            break;
-        case RulerUnits.Centimeters:
-            fontUnitsLabelText.text = "cm";
-            break;
-        case RulerUnits.Pixels:
-            fontUnitsLabelText.text = "px";
-            break;
-        default:
-            fontUnitsLabelText.text = "pt";
-    }
+    fontUnitsLabelText.text = getRulerUnits();
 
     // DECIMALPLACESGROUP
     // ==================
@@ -362,26 +343,7 @@ if (app.documents.length > 0) {
     };
 
     var gapUnitsLabelText = gapGroup.add("statictext", undefined, undefined, { name: "gapUnitsLabelText" });
-    gapUnitsLabelText.text = "";
-    switch (doc.rulerUnits) {
-        case RulerUnits.Picas:
-            gapUnitsLabelText.text = "pc";
-            break;
-        case RulerUnits.Inches:
-            gapUnitsLabelText.text = "in";
-            break;
-        case RulerUnits.Millimeters:
-            gapUnitsLabelText.text = "mm";
-            break;
-        case RulerUnits.Centimeters:
-            gapUnitsLabelText.text = "cm";
-            break;
-        case RulerUnits.Pixels:
-            gapUnitsLabelText.text = "px";
-            break;
-        default:
-            gapUnitsLabelText.text = "pt";
-    }
+    gapUnitsLabelText.text = getRulerUnits();
 
     // OPTIONSPANEL
     // ============
