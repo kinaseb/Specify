@@ -285,7 +285,7 @@ if (app.documents.length > 0) {
     fontSizeInput.text = defaultFontSize;
     fontSizeInput.characters = 5;
     fontSizeInput.preferredSize.width = 60;
-    fontSizeInput.onActivate = function () {
+    fontSizeInput.onChange = function () {
         restoreDefaultsButton.enabled = true;
     }
     fontSizeInput.onDeactivate = function () {
@@ -335,10 +335,8 @@ if (app.documents.length > 0) {
     decimalPlacesInput.characters = 1;
     decimalPlacesInput.preferredSize.width = 40;
     decimalPlacesInput.text = defaultDecimals;
-    decimalPlacesInput.onActivate = function () {
-        restoreDefaultsButton.enabled = true;
-    };
     decimalPlacesInput.onChange = function () {
+        restoreDefaultsButton.enabled = true;
         decimalPlacesInput.text = decimalPlacesInput.text.replace(/[^0-9]/g, "");
     };
 
@@ -358,10 +356,8 @@ if (app.documents.length > 0) {
     gapInput.characters = 6;
     gapInput.preferredSize.width = 60;
     gapInput.text = defaultGap;
-    gapInput.onActivate = function () {
-        restoreDefaultsButton.enabled = true;
-    };
     gapInput.onChange = function () {
+        restoreDefaultsButton.enabled = true;
         gapInput.text = gapInput.text.replace(/[^0-9\.]/g, "");
     };
 
@@ -526,7 +522,7 @@ if (app.documents.length > 0) {
     restoreDefaultsButton.text = "Restore All Defaults";
     restoreDefaultsButton.preferredSize.width = 124;
     restoreDefaultsButton.alignment = ["center", "center"];
-    restoreDefaultsButton.enabled = (setFontSize != defaultFontSize || setRed != defaultColorRed || setGreen != defaultColorGreen || setBlue != defaultColorBlue || setDecimals != defaultDecimals || setScale != defaultScale || setCustomUnits != defaultCustomUnits ? true : false);
+    restoreDefaultsButton.enabled = (setFontSize != defaultFontSize || setRed != defaultColorRed || setGreen != defaultColorGreen || setBlue != defaultColorBlue || setDecimals != defaultDecimals || setGap != defaultGap || setScale != defaultScale || setCustomUnits != defaultCustomUnits ? true : false);
     restoreDefaultsButton.onClick = function () {
         restoreDefaults();
     };
