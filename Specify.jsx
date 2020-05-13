@@ -513,7 +513,7 @@ if (app.documents.length > 0) {
     // ===========
     var footerGroup = dialogMainGroup.add("group", undefined, { name: "footerGroup" });
     footerGroup.orientation = "row";
-    footerGroup.alignChildren = ["left", "center"];
+    footerGroup.alignChildren = ["left", "bottom"];
     footerGroup.spacing = 20;
     footerGroup.margins = 0;
 
@@ -526,20 +526,20 @@ if (app.documents.length > 0) {
     updatesGroup.margins = 0;
 
     var specifyUpdatesText = updatesGroup.add("statictext", undefined, undefined, { name: "specifyUpdatesText" });
-    specifyUpdatesText.text = "For updates & more info:";    
+    specifyUpdatesText.text = "For updates & more info:";
 
-    var urlButton = updatesGroup.add("button", undefined, undefined, {name: "urlButton"}); 
-    urlButton.text = "https://github.com/adamdehaven/Specify"; 
-    urlButton.alignment = ["center","center"]; 
+    var urlButton = updatesGroup.add("button", undefined, undefined, {name: "urlButton"});
+    urlButton.text = "https://github.com/adamdehaven/Specify";
+    urlButton.alignment = ["center","center"];
     urlButton.onClick = function () {
         openURL(urlButton.text);
     };
-    
+
     function openURL(url) {
         if (!url) {
             return
         }
-    
+
         try {
             if (app.version > 6) {
                 if (File.fs == "Macintosh") {
