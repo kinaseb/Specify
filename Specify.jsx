@@ -49,6 +49,12 @@ if (app.documents.length > 0) {
     // Gap
     var setGap = 4;
     var defaultGap = $.getenv("Specify_defaultGap") ? $.getenv("Specify_defaultGap") : setGap;
+    // Stroke width
+    var setStrokeWidth = 0.5;
+    var defaultStrokeWidth = $.getenv("Specify_defaultStrokeWidth") ? $.getenv("Specify_defaultStrokeWidth") : setStrokeWidth;
+    // Head Tail Size
+    var setHeadTailSize = 6;
+    var defaultHeadTailSize = $.getenv("Specify_defaultHeadTailSize") ? $.getenv("Specify_defaultHeadTailSize") : setHeadTailSize;
 
     // =========================================================================================== //
     // Create Dialog
@@ -85,14 +91,13 @@ if (app.documents.length > 0) {
     var tabOptions = verticalTabbedPanel_innerwrap.add("group", undefined, { name: "tabOptions" });
     tabOptions.text = "OPTIONS";
     tabOptions.orientation = "row";
-    tabOptions.alignChildren = ["left", "top"];
+    tabOptions.alignChildren = ["fill", "fill"];
     tabOptions.spacing = 10;
     tabOptions.margins = 0;
 
     // OPTIONSMAINGROUP
     // ================
     var optionsMainGroup = tabOptions.add("group", undefined, { name: "optionsMainGroup" });
-    optionsMainGroup.preferredSize.height = 410;
     optionsMainGroup.orientation = "column";
     optionsMainGroup.alignChildren = ["fill", "top"];
     optionsMainGroup.spacing = 15;
@@ -102,7 +107,6 @@ if (app.documents.length > 0) {
     // ==============
     var dimensionPanel = optionsMainGroup.add("panel", undefined, undefined, { name: "dimensionPanel" });
     dimensionPanel.text = "Select Dimensions(s) to Specify";
-    dimensionPanel.preferredSize.height = 175;
     dimensionPanel.orientation = "column";
     dimensionPanel.alignChildren = ["left", "top"];
     dimensionPanel.spacing = 10;
@@ -205,7 +209,6 @@ if (app.documents.length > 0) {
     // ==========
     var scalePanel = optionsMainGroup.add("panel", undefined, undefined, { name: "scalePanel" });
     scalePanel.text = "Scale";
-    scalePanel.preferredSize.height = 146;
     scalePanel.orientation = "column";
     scalePanel.alignChildren = ["left", "top"];
     scalePanel.spacing = 10;
@@ -236,7 +239,7 @@ if (app.documents.length > 0) {
     }
 
     var customScaleDropdown = customScaleGroup.add("dropdownlist", undefined, undefined, { name: "customScaleDropdown", items: customScaleDropdown_array });
-    customScaleDropdown.helpTip = "Choose the scale of the artwork/document.\n\nExample: Choosing '1/4' will indicate the artwork is drawn at\none-fourth scale, resulting in dimension values that are 4x their\ndrawn dimensions.\n\nDefault: 1/1";
+    customScaleDropdown.helpTip = "Choose the scale of the artwork/document.\n\nExample: Choosing '1/4' will indicate the artwork is drawn at\none-fourth scale, resulting in dimension values that are 4x their\ndrawn dimensions.";
     customScaleDropdown.selection = defaultScale;
     customScaleDropdown.onChange = function () {
         restoreDefaultsButton.enabled = true;
@@ -255,33 +258,111 @@ if (app.documents.length > 0) {
     var tabStyles = verticalTabbedPanel_innerwrap.add("group", undefined, { name: "tabStyles" });
     tabStyles.text = "STYLES";
     tabStyles.orientation = "column";
-    tabStyles.alignChildren = ["fill", "top"];
+    tabStyles.alignChildren = ["fill", "fill"];
     tabStyles.spacing = 10;
     tabStyles.margins = 0;
 
-    // OPTIONSPANEL
+    // LABELSTYLESPANEL
     // ============
-    var optionsPanel = tabStyles.add("panel", undefined, undefined, { name: "optionsPanel" });
-    optionsPanel.text = "Styles";
-    optionsPanel.preferredSize.height = 410;
-    optionsPanel.orientation = "column";
-    optionsPanel.alignChildren = ["fill", "top"];
-    optionsPanel.spacing = 10;
-    optionsPanel.margins = 20;
+    var labelStylesPanel = tabStyles.add("panel", undefined, undefined, { name: "labelStylesPanel" });
+    labelStylesPanel.text = "Label Styles";
+    labelStylesPanel.orientation = "column";
+    labelStylesPanel.alignChildren = ["fill", "top"];
+    labelStylesPanel.spacing = 10;
+    labelStylesPanel.margins = 20;
+
+    var units = labelStylesPanel.add("checkbox", undefined, undefined, { name: "units" });
+    units.helpTip = "When checked, inserts the units in the label alongside\nthe outputted dimension.\nExample: 220 px";
+    units.text = "Include units in label";
+    units.value = defaultUnits;
+    units.onClick = function () {
+        if (units.value == false) {
+            useCustomUnits.value = false;
+            useCustomUnits.enabled = false;
+            customUnitsInput.text = getRulerUnits();
+            customUnitsInput.enabled = false;
+        } else {
+            useCustomUnits.enabled = true;
+        }
+    };
+
+    // CUSTOMIZEUNITSGROUP
+    // ===================
+    var customizeUnitsGroup = labelStylesPanel.add("group", undefined, { name: "customizeUnitsGroup" });
+    customizeUnitsGroup.orientation = "row";
+    customizeUnitsGroup.alignChildren = ["left", "center"];
+    customizeUnitsGroup.spacing = 10;
+    customizeUnitsGroup.margins = 0;
+
+    var useCustomUnits = customizeUnitsGroup.add("checkbox", undefined, undefined, { name: "useCustomUnits" });
+    useCustomUnits.helpTip = "When checked, allows user to customize\nthe text of the units label.\nExample: ft";
+    useCustomUnits.text = "Customize units text";
+    useCustomUnits.value = defaultUseCustomUnits;
+    if (units.value == false) {
+        useCustomUnits.value = false;
+        useCustomUnits.enabled = false;
+    } else {
+        useCustomUnits.enabled = true;
+    }
+    useCustomUnits.onClick = function () {
+        if (useCustomUnits.value == true) {
+            customUnitsInput.enabled = true;
+        } else {
+            customUnitsInput.text = getRulerUnits();
+            customUnitsInput.enabled = false;
+        }
+    };
+
+    var customUnitsInput = customizeUnitsGroup.add('edittext {properties: {name: "customUnitsInput"}}');
+    customUnitsInput.helpTip = "Enter the string to display after the dimension\nnumber when using a custom scale.";
+    customUnitsInput.text = defaultCustomUnits;
+    customUnitsInput.enabled = defaultUseCustomUnits;
+    customUnitsInput.characters = 20;
+    customUnitsInput.preferredSize.width = 120;
+    if (useCustomUnits.value == true) {
+        customUnitsInput.enabled = true;
+    } else {
+        customUnitsInput.enabled = false;
+    }
+    customUnitsInput.onChange = function () {
+        restoreDefaultsButton.enabled = true;
+        customUnitsInput.text = customUnitsInput.text.replace(/[^ a-zA-Z]/g, "");
+    };
+
+    // DECIMALPLACESGROUP
+    // ==================
+    var decimalPlacesGroup = labelStylesPanel.add("group", undefined, { name: "decimalPlacesGroup" });
+    decimalPlacesGroup.orientation = "row";
+    decimalPlacesGroup.alignChildren = ["left", "center"];
+    decimalPlacesGroup.spacing = 2;
+    decimalPlacesGroup.margins = 0;
+
+    var decimalPlacesLabel = decimalPlacesGroup.add("statictext", undefined, undefined, { name: "decimalPlacesLabel" });
+    decimalPlacesLabel.text = "Decimals:";
+
+    var decimalPlacesInput = decimalPlacesGroup.add('edittext {justify: "right", properties: {name: "decimalPlacesInput"}}');
+    decimalPlacesInput.helpTip = "Enter the desired number of decimal places to\ndisplay in the label dimensions.";
+    decimalPlacesInput.characters = 1;
+    decimalPlacesInput.preferredSize.width = 40;
+    decimalPlacesInput.text = defaultDecimals;
+    decimalPlacesInput.onChange = function () {
+        restoreDefaultsButton.enabled = true;
+        decimalPlacesInput.text = decimalPlacesInput.text.replace(/[^0-9]/g, "");
+    };
 
     // FONTGROUP
     // =========
-    var fontGroup = optionsPanel.add("group", undefined, { name: "fontGroup" });
+    var fontGroup = labelStylesPanel.add("group", undefined, { name: "fontGroup" });
     fontGroup.orientation = "row";
     fontGroup.alignChildren = ["left", "center"];
-    fontGroup.spacing = 10;
+    fontGroup.spacing = 2;
     fontGroup.margins = 0;
 
     var fontLabel = fontGroup.add("statictext", undefined, undefined, { name: "fontLabel" });
     fontLabel.text = "Font size:";
 
     var fontSizeInput = fontGroup.add('edittext {justify: "right", properties: {name: "fontSizeInput"}}');
-    fontSizeInput.helpTip = "Enter the desired font size for the dimension label(s).\nIf value is less than one (e.g. 0.25) you must include a\nleading zero before the decimal point.\n\nDefault: " + setFontSize;
+    fontSizeInput.helpTip = "Enter the desired font size for the dimension label(s).\nIf value is less than one (e.g. 0.25) you must include a\nleading zero before the decimal point.";
     fontSizeInput.text = defaultFontSize;
     fontSizeInput.characters = 5;
     fontSizeInput.preferredSize.width = 60;
@@ -300,122 +381,9 @@ if (app.documents.length > 0) {
     var fontUnitsLabelText = fontGroup.add("statictext", undefined, undefined, { name: "fontUnitsLabelText" });
     fontUnitsLabelText.text = getRulerUnits();
 
-    // DECIMALPLACESGROUP
-    // ==================
-    var decimalPlacesGroup = optionsPanel.add("group", undefined, { name: "decimalPlacesGroup" });
-    decimalPlacesGroup.orientation = "row";
-    decimalPlacesGroup.alignChildren = ["left", "center"];
-    decimalPlacesGroup.spacing = 10;
-    decimalPlacesGroup.margins = 0;
-
-    var decimalPlacesLabel = decimalPlacesGroup.add("statictext", undefined, undefined, { name: "decimalPlacesLabel" });
-    decimalPlacesLabel.text = "Decimals:";
-
-    var decimalPlacesInput = decimalPlacesGroup.add('edittext {justify: "right", properties: {name: "decimalPlacesInput"}}');
-    decimalPlacesInput.helpTip = "Enter the desired number of decimal places to\ndisplay in the label dimensions.\n\nDefault: " + setDecimals;
-    decimalPlacesInput.characters = 1;
-    decimalPlacesInput.preferredSize.width = 40;
-    decimalPlacesInput.text = defaultDecimals;
-    decimalPlacesInput.onChange = function () {
-        restoreDefaultsButton.enabled = true;
-        decimalPlacesInput.text = decimalPlacesInput.text.replace(/[^0-9]/g, "");
-    };
-
-    // GAPGROUP
-    // ========
-    var gapGroup = optionsPanel.add("group", undefined, { name: "gapGroup" });
-    gapGroup.orientation = "row";
-    gapGroup.alignChildren = ["left", "center"];
-    gapGroup.spacing = 10;
-    gapGroup.margins = 0;
-
-    var gapLabel = gapGroup.add("statictext", undefined, undefined, { name: "gapLabel" });
-    gapLabel.text = "Gap size:";
-
-    var gapInput = gapGroup.add('edittext {justify: "right", properties: {name: "gapInput"}}');
-    gapInput.helpTip = "Enter the desired gap size between the dimension label(s) and the object.\n\nDefault: " + setGap;
-    gapInput.characters = 6;
-    gapInput.preferredSize.width = 60;
-    gapInput.text = defaultGap;
-    gapInput.onChange = function () {
-        restoreDefaultsButton.enabled = true;
-        gapInput.text = gapInput.text.replace(/[^0-9\.]/g, "");
-    };
-
-    var gapUnitsLabelText = gapGroup.add("statictext", undefined, undefined, { name: "gapUnitsLabelText" });
-    gapUnitsLabelText.text = getRulerUnits();
-
-    // OPTIONSPANEL
-    // ============
-    var divider1 = optionsPanel.add("panel", undefined, undefined, { name: "divider1" });
-    divider1.alignment = "fill";
-
-    var units = optionsPanel.add("checkbox", undefined, undefined, { name: "units" });
-    units.helpTip = "When checked, inserts the units label alongside\nthe outputted dimension.\nExample: 220 px";
-    units.text = "Include units label(s)";
-    units.value = defaultUnits;
-    units.onClick = function () {
-        if (units.value == false) {
-            useCustomUnits.value = false;
-            useCustomUnits.enabled = false;
-            customUnitsInput.text = getRulerUnits();
-            customUnitsInput.enabled = false;
-        } else {
-            useCustomUnits.enabled = true;
-        }
-    };
-
-    // CUSTOMIZEUNITSGROUP
-    // ===================
-    var customizeUnitsGroup = optionsPanel.add("group", undefined, { name: "customizeUnitsGroup" });
-    customizeUnitsGroup.orientation = "row";
-    customizeUnitsGroup.alignChildren = ["left", "center"];
-    customizeUnitsGroup.spacing = 10;
-    customizeUnitsGroup.margins = 0;
-
-    var useCustomUnits = customizeUnitsGroup.add("checkbox", undefined, undefined, { name: "useCustomUnits" });
-    useCustomUnits.helpTip = "When checked, allows user to customize\nthe text of the units label.\nExample: ft";
-    useCustomUnits.text = "Customize Units Label";
-    useCustomUnits.value = defaultUseCustomUnits;
-    if (units.value == false) {
-        useCustomUnits.value = false;
-        useCustomUnits.enabled = false;
-    } else {
-        useCustomUnits.enabled = true;
-    }
-    useCustomUnits.onClick = function () {
-        if (useCustomUnits.value == true) {
-            customUnitsInput.enabled = true;
-        } else {
-            customUnitsInput.text = getRulerUnits();
-            customUnitsInput.enabled = false;
-        }
-    };
-
-    var customUnitsInput = customizeUnitsGroup.add('edittext {properties: {name: "customUnitsInput"}}');
-    customUnitsInput.helpTip = "Enter the string to display after the dimension\nnumber when using a custom scale.\n\nDefault: " + setCustomUnits;
-    customUnitsInput.text = defaultCustomUnits;
-    customUnitsInput.enabled = defaultUseCustomUnits;
-    customUnitsInput.characters = 20;
-    customUnitsInput.preferredSize.width = 120;
-    if (useCustomUnits.value == true) {
-        customUnitsInput.enabled = true;
-    } else {
-        customUnitsInput.enabled = false;
-    }
-    customUnitsInput.onChange = function () {
-        restoreDefaultsButton.enabled = true;
-        customUnitsInput.text = customUnitsInput.text.replace(/[^ a-zA-Z]/g, "");
-    };
-
-    // OPTIONSPANEL
-    // ============
-    var divider2 = optionsPanel.add("panel", undefined, undefined, { name: "divider2" });
-    divider2.alignment = "fill";
-
     // LABELCOLORGROUP
     // ===============
-    var labelColorGroup = optionsPanel.add("group", undefined, { name: "labelColorGroup" });
+    var labelColorGroup = labelStylesPanel.add("group", undefined, { name: "labelColorGroup" });
     labelColorGroup.orientation = "row";
     labelColorGroup.alignChildren = ["left", "center"];
     labelColorGroup.spacing = 10;
@@ -427,18 +395,99 @@ if (app.documents.length > 0) {
     var colorPicker = labelColorGroup.add("statictext", undefined, undefined, { name: "colorPicker" });
     colorPicker.text = "TODO";
 
+    // LINESTYLESPANEL
+    // ============
+    var lineStylesPanel = tabStyles.add("panel", undefined, undefined, { name: "lineStylesPanel" });
+    lineStylesPanel.text = "Line Styles";
+    lineStylesPanel.orientation = "column";
+    lineStylesPanel.alignChildren = ["fill", "top"];
+    lineStylesPanel.spacing = 10;
+    lineStylesPanel.margins = 20;
+
+    // GAPGROUP
+    // ========
+    var gapGroup = lineStylesPanel.add("group", undefined, { name: "gapGroup" });
+    gapGroup.orientation = "row";
+    gapGroup.alignChildren = ["left", "center"];
+    gapGroup.spacing = 2;
+    gapGroup.margins = 0;
+
+    var gapLabel = gapGroup.add("statictext", undefined, undefined, { name: "gapLabel" });
+    gapLabel.text = "Gap between label and object:";
+
+    var gapInput = gapGroup.add('edittext {justify: "right", properties: {name: "gapInput"}}');
+    gapInput.helpTip = "Enter the desired gap between the dimension label(s) and the object.";
+    gapInput.characters = 6;
+    gapInput.preferredSize.width = 60;
+    gapInput.text = defaultGap;
+    gapInput.onChange = function () {
+        restoreDefaultsButton.enabled = true;
+        gapInput.text = gapInput.text.replace(/[^0-9\.]/g, "");
+    };
+
+    var gapUnitsLabelText = gapGroup.add("statictext", undefined, undefined, { name: "gapUnitsLabelText" });
+    gapUnitsLabelText.text = getRulerUnits();
+
+    // STROKEWIDTHGROUP
+    // ========
+    var strokeWidthGroup = lineStylesPanel.add("group", undefined, { name: "strokeWidthGroup" });
+    strokeWidthGroup.orientation = "row";
+    strokeWidthGroup.alignChildren = ["left", "center"];
+    strokeWidthGroup.spacing = 2;
+    strokeWidthGroup.margins = 0;
+
+    var strokeWidthLabel = strokeWidthGroup.add("statictext", undefined, undefined, { name: "strokeWidthLabel" });
+    strokeWidthLabel.text = "Line stroke width:";
+
+    var strokeWidthInput = strokeWidthGroup.add('edittext {justify: "right", properties: {name: "strokeWidthInput"}}');
+    strokeWidthInput.helpTip = "Enter the desired stroke width of the dimension line.";
+    strokeWidthInput.characters = 6;
+    strokeWidthInput.preferredSize.width = 60;
+    strokeWidthInput.text = defaultStrokeWidth;
+    strokeWidthInput.onChange = function () {
+        restoreDefaultsButton.enabled = true;
+        strokeWidthInput.text = strokeWidthInput.text.replace(/[^0-9\.]/g, "");
+    };
+
+    var strokeWidthUnitsLabelText = strokeWidthGroup.add("statictext", undefined, undefined, { name: "strokeWidthUnitsLabelText" });
+    strokeWidthUnitsLabelText.text = getRulerUnits();
+
+    // HEADTAILSIZEGROUP
+    // ========
+    var headTailSizeGroup = lineStylesPanel.add("group", undefined, { name: "headTailSizeGroup" });
+    headTailSizeGroup.orientation = "row";
+    headTailSizeGroup.alignChildren = ["left", "center"];
+    headTailSizeGroup.spacing = 2;
+    headTailSizeGroup.margins = 0;
+
+    var headTailSizeLabel = headTailSizeGroup.add("statictext", undefined, undefined, { name: "headTailSizeLabel" });
+    headTailSizeLabel.text = "Line head & tail length:";
+
+    var headTailSizeInput = headTailSizeGroup.add('edittext {justify: "right", properties: {name: "headTailSizeInput"}}');
+    headTailSizeInput.helpTip = "Enter the desired length of the line at both ends of the dimension line.";
+    headTailSizeInput.characters = 6;
+    headTailSizeInput.preferredSize.width = 60;
+    headTailSizeInput.text = defaultHeadTailSize;
+    headTailSizeInput.onChange = function () {
+        restoreDefaultsButton.enabled = true;
+        headTailSizeInput.text = headTailSizeInput.text.replace(/[^0-9\.]/g, "");
+    };
+
+    var headTailSizeUnitsLabelText = headTailSizeGroup.add("statictext", undefined, undefined, { name: "headTailSizeUnitsLabelText" });
+    headTailSizeUnitsLabelText.text = getRulerUnits();
+
     // TABDEFAULTS
     // ===========
     var tabDefaults = verticalTabbedPanel_innerwrap.add("group", undefined, { name: "tabDefaults" });
     tabDefaults.text = "RESTORE DEFAULTS";
     tabDefaults.orientation = "column";
-    tabDefaults.alignChildren = ["fill", "top"];
+    tabDefaults.alignChildren = ["fill", "fill"];
     tabDefaults.spacing = 10;
     tabDefaults.margins = 0;
 
     // VERTICALTABBEDPANEL
     // ===================
-    verticalTabbedPanel_tabs = [tabOptions, tabStyles, tabDefaults];
+    var verticalTabbedPanel_tabs = [tabOptions, tabStyles, tabDefaults];
 
     for (var i = 0; i < verticalTabbedPanel_tabs.length; i++) {
         verticalTabbedPanel_tabs[i].alignment = ["fill", "fill"];
@@ -463,7 +512,6 @@ if (app.documents.length > 0) {
     // =============
     var defaultsPanel = tabDefaults.add("panel", undefined, undefined, { name: "defaultsPanel" });
     defaultsPanel.text = "Restore Defaults";
-    defaultsPanel.preferredSize.height = 410;
     defaultsPanel.orientation = "column";
     defaultsPanel.alignChildren = ["center", "center"];
     defaultsPanel.spacing = 10;
@@ -479,12 +527,14 @@ if (app.documents.length > 0) {
 
     var infoText = restoreDefaultsGroup.add("statictext", undefined, undefined, { name: "infoText" });
     infoText.text = "Options are persistent until application is closed";
+    infoText.justify = "center";
+    infoText.alignment = ["center", "center"];
 
     var restoreDefaultsButton = restoreDefaultsGroup.add("button", undefined, undefined, { name: "restoreDefaultsButton" });
     restoreDefaultsButton.text = "Restore All Defaults";
     restoreDefaultsButton.preferredSize.width = 124;
     restoreDefaultsButton.alignment = ["center", "center"];
-    restoreDefaultsButton.enabled = (setFontSize != defaultFontSize || setRed != defaultColorRed || setGreen != defaultColorGreen || setBlue != defaultColorBlue || setDecimals != defaultDecimals || setGap != defaultGap || setScale != defaultScale || setCustomUnits != defaultCustomUnits ? true : false);
+    restoreDefaultsButton.enabled = (setFontSize != defaultFontSize || setRed != defaultColorRed || setGreen != defaultColorGreen || setBlue != defaultColorBlue || setDecimals != defaultDecimals || setGap != defaultGap || setStrokeWidth != defaultStrokeWidth || setHeadTailSize != defaultHeadTailSize || setScale != defaultScale || setCustomUnits != defaultCustomUnits ? true : false);
     restoreDefaultsButton.onClick = function () {
         restoreDefaults();
     };
@@ -497,6 +547,8 @@ if (app.documents.length > 0) {
         // colorInputBlue.text = setBlue;
         decimalPlacesInput.text = setDecimals;
         gapInput.text = setGap;
+        strokeWidthInput.text = setStrokeWidth;
+        headTailSizeInput.text = setHeadTailSize;
         customScaleDropdown.selection = setScale;
         customUnitsInput.text = setCustomUnits;
         useCustomUnits.value = false;
@@ -509,7 +561,9 @@ if (app.documents.length > 0) {
         $.setenv("Specify_defaultColorGreen", "");
         $.setenv("Specify_defaultColorBlue", "");
         $.setenv("Specify_defaultDecimals", "");
-        $.setenv("Specify_defaultGap", "")
+        $.setenv("Specify_defaultGap", "");
+        $.setenv("Specify_defaultStrokeWidth", "");
+        $.setenv("Specify_defaultHeadTailSize", "");
         $.setenv("Specify_defaultScale", "");
         $.setenv("Specify_defaultUseCustomUnits", "");
         $.setenv("Specify_defaultCustomUnits", "");
@@ -523,21 +577,36 @@ if (app.documents.length > 0) {
     // FOOTERGROUP
     // ===========
     var footerGroup = dialogMainGroup.add("group", undefined, { name: "footerGroup" });
-    footerGroup.orientation = "row";
+    footerGroup.orientation = "column";
     footerGroup.alignChildren = ["left", "bottom"];
-    footerGroup.spacing = 20;
+    footerGroup.spacing = 5;
     footerGroup.margins = 0;
+
+    // FOOTERGROUP
+    // ============
+    var divider3 = footerGroup.add("panel", undefined, undefined, { name: "divider3" });
+    divider3.alignment = "fill";
+
+    // INNERFOOTERGROUP
+    // ===========
+    var innerFooterGroup = footerGroup.add("group", undefined, { name: "innerFooterGroup" });
+    innerFooterGroup.orientation = "row";
+    innerFooterGroup.alignChildren = ["left", "bottom"];
+    innerFooterGroup.spacing = 20;
+    innerFooterGroup.margins = 0;
 
     // UPDATESGROUP
     // ============
-    var updatesGroup = footerGroup.add("group", undefined, { name: "updatesGroup" });
+    var updatesGroup = innerFooterGroup.add("group", undefined, { name: "updatesGroup" });
     updatesGroup.orientation = "column";
     updatesGroup.alignChildren = ["left", "center"];
-    updatesGroup.spacing = 3;
+    updatesGroup.spacing = 5;
     updatesGroup.margins = 0;
 
     var specifyUpdatesText = updatesGroup.add("statictext", undefined, undefined, { name: "specifyUpdatesText" });
-    specifyUpdatesText.text = "For updates & more info:";
+    specifyUpdatesText.text = "Click below for updates & more info:";
+    specifyUpdatesText.justify = "center";
+    specifyUpdatesText.alignment = ["center", "center"];
 
     var urlButton = updatesGroup.add("button", undefined, undefined, {name: "urlButton"});
     urlButton.text = "https://github.com/adamdehaven/Specify";
@@ -580,7 +649,7 @@ if (app.documents.length > 0) {
 
     // BUTTONGROUP
     // ===========
-    var buttonGroup = footerGroup.add("group", undefined, { name: "buttonGroup" });
+    var buttonGroup = innerFooterGroup.add("group", undefined, { name: "buttonGroup" });
     buttonGroup.orientation = "row";
     buttonGroup.alignChildren = ["left", "bottom"];
     buttonGroup.spacing = 10;
@@ -620,8 +689,11 @@ if (app.documents.length > 0) {
     // Gap between measurement lines and object
     var gap;
 
-    // Size of perpendicular measurement lines.
-    var size = 6;
+    // Width of line stroke
+    var strokeWidth;
+
+    // Length of perpendicular measurement lines
+    var headTailSize;
 
     //
     // Start the Spec
@@ -675,6 +747,22 @@ if (app.documents.length > 0) {
             $.setenv("Specify_defaultGap", gap);
         }
 
+        var validStrokeWidth = /^(0|[1-9]\d*)(\.\d+)?$/.test(strokeWidthInput.text); // Allows for decimals/integers
+        if (validStrokeWidth) {
+            // Stroke Width
+            strokeWidth = parseFloat(strokeWidthInput.text);
+            // Set environmental variable
+            $.setenv("Specify_defaultStrokeWidth", strokeWidth);
+        }
+
+        var validHeadTailSize = /^(0|[1-9]\d*)(\.\d+)?$/.test(headTailSizeInput.text); // Allows for decimals/integers
+        if (validHeadTailSize) {
+            // Head Tail Size
+            headTailSize = parseFloat(headTailSizeInput.text);
+            // Set environmental variable
+            $.setenv("Specify_defaultHeadTailSize", headTailSize);
+        }
+
         var theScale = parseInt(customScaleDropdown.selection.toString().replace(/1\//g, "").replace(/[^0-9]/g, ""));
         scale = theScale;
         // Set environmental variable
@@ -721,9 +809,23 @@ if (app.documents.length > 0) {
             verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
             // If gapInput.text does not match regex decimals/integers
             beep();
-            alert("Gap size must be a whole number (e.g. 22), or number with decimals (e.g. 18.4)");
+            alert("Gap size must be a whole number (e.g. 22), or a number with decimals (e.g. 18.4)");
             gapInput.active = true;
             gapInput.text = setGap;
+        } else if (!validStrokeWidth) {
+            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
+            // If strokeWidthInput.text does not match regex decimals/integers
+            beep();
+            alert("Stroke width must be a whole number (e.g. 22), or a number with decimals (e.g. 18.4)");
+            headTailSizeInput.active = true;
+            headTailSizeInput.text = setHeadTailSize;
+        } else if (!validHeadTailSize) {
+            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
+            // If headTailSizeInput.text does not match regex decimals/integers
+            beep();
+            alert("Head & tail size must be a whole number (e.g. 22), or a number with decimals (e.g. 18.4)");
+            headTailSizeInput.active = true;
+            headTailSizeInput.text = setHeadTailSize;
         } else if (selectedItems == 2 && between.value) {
             if (top) specDouble(objectsToSpec[0], objectsToSpec[1], "Top");
             if (left) specDouble(objectsToSpec[0], objectsToSpec[1], "Left");
@@ -806,13 +908,13 @@ if (app.documents.length > 0) {
 
             // 2 vertical lines
             lines[0] = new Array(new Array(a, c + (gap) * dir));
-            lines[0].push(new Array(a, c + (gap + size) * dir));
+            lines[0].push(new Array(a, c + (gap + headTailSize) * dir));
             lines[1] = new Array(new Array(b, c + (gap) * dir));
-            lines[1].push(new Array(b, c + (gap + size) * dir));
+            lines[1].push(new Array(b, c + (gap + headTailSize) * dir));
 
             // 1 horizontal line
-            lines[2] = new Array(new Array(a, c + (gap + size / 2) * dir));
-            lines[2].push(new Array(b, c + (gap + size / 2) * dir));
+            lines[2] = new Array(new Array(a, c + (gap + headTailSize / 2) * dir));
+            lines[2].push(new Array(b, c + (gap + headTailSize / 2) * dir));
 
             // Create text label
             if (where == "Top") {
@@ -820,7 +922,7 @@ if (app.documents.length > 0) {
                 t.top += t.height;
             } else {
                 var t = specLabel(w, (a + b) / 2, lines[0][0][1], color);
-                t.top -= size;
+                t.top -= headTailSize;
             }
             t.left -= t.width / 2;
 
@@ -829,13 +931,13 @@ if (app.documents.length > 0) {
 
             // 2 horizontal lines
             lines[0] = new Array(new Array(c + (gap) * dir, a));
-            lines[0].push(new Array(c + (gap + size) * dir, a));
+            lines[0].push(new Array(c + (gap + headTailSize) * dir, a));
             lines[1] = new Array(new Array(c + (gap) * dir, b));
-            lines[1].push(new Array(c + (gap + size) * dir, b));
+            lines[1].push(new Array(c + (gap + headTailSize) * dir, b));
 
             //1 vertical line
-            lines[2] = new Array(new Array(c + (gap + size / 2) * dir, a));
-            lines[2].push(new Array(c + (gap + size / 2) * dir, b));
+            lines[2] = new Array(new Array(c + (gap + headTailSize / 2) * dir, a));
+            lines[2].push(new Array(c + (gap + headTailSize / 2) * dir, b));
 
             // Create text label
             if (where == "Left") {
@@ -859,7 +961,7 @@ if (app.documents.length > 0) {
             var p = doc.pathItems.add();
             p.setEntirePath(lines[i]);
             p.strokeDashes = []; // Prevent dashed SPEC lines
-            setLineStyle(p, color);
+            setLineStyle(p, color, parseFloat(strokeWidth));
             specgroup.push(p);
         }
 
@@ -1028,11 +1130,11 @@ if (app.documents.length > 0) {
         }
     };
 
-    function setLineStyle(path, color) {
+    function setLineStyle(path, color, sw) {
         path.filled = false;
         path.stroked = true;
         path.strokeColor = color;
-        path.strokeWidth = 0.5;
+        path.strokeWidth = parseFloat(sw);
         return path;
     };
 
