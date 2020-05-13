@@ -362,7 +362,7 @@ if (app.documents.length > 0) {
         restoreDefaultsButton.enabled = true;
     };
     gapInput.onChange = function () {
-        gapInput.text = gapInput.text.replace(/[^0-9]/g, "");
+        gapInput.text = gapInput.text.replace(/[^0-9\.]/g, "");
     };
 
     var gapUnitsLabelText = gapGroup.add("statictext", undefined, undefined, { name: "gapUnitsLabelText" });
@@ -709,10 +709,10 @@ if (app.documents.length > 0) {
             $.setenv("Specify_defaultDecimals", decimals);
         }
 
-        var validGap = /^([0-9]{1}(\.\d{1,4})?|[1-9]{1}[0-9]{4})$/.test(gapInput.text); // Allows for 0 to 9999.9999
+        var validGap = /^(0|[1-9]\d*)(\.\d+)?$/.test(gapInput.text); // Allows for decimals/integers
         if (validGap) {
             // Gap size
-            gap = gapInput.text;
+            gap = parseFloat(gapInput.text);
             // Set environmental variable
             $.setenv("Specify_defaultGap", gap);
         }
@@ -761,9 +761,9 @@ if (app.documents.length > 0) {
             decimalPlacesInput.text = setDecimals;
         } else if (!validGap) {
             verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
-            // If gapInput.text does not match regex 0 to 9999.9999
+            // If gapInput.text does not match regex decimals/integers
             beep();
-            alert("Gap size must be in the range from 0 to 9999.9999");
+            alert("Gap size must be a whole number (e.g. 22), or number with decimals (e.g. 18.4)");
             gapInput.active = true;
             gapInput.text = setGap;
         } else if (selectedItems == 2 && between.value) {
