@@ -76,24 +76,22 @@ if (app.documents.length > 0) {
     dialogMainGroup.spacing = 10;
     dialogMainGroup.margins = 0;
 
-    // VERTICALTABBEDPANEL
+    // HORIZONTALTABBEDPANEL
     // ===================
-    var verticalTabbedPanel = dialogMainGroup.add("group", undefined, undefined, { name: "verticalTabbedPanel" });
-    verticalTabbedPanel.alignChildren = ["left", "fill"];
-    var verticalTabbedPanel_nav = verticalTabbedPanel.add("listbox", undefined, ['OPTIONS', 'STYLES', 'RESTORE DEFAULTS']);
-    var verticalTabbedPanel_innerwrap = verticalTabbedPanel.add("group")
-    verticalTabbedPanel_innerwrap.alignment = ["fill", "fill"];
-    verticalTabbedPanel_innerwrap.orientation = ["stack"];
-    verticalTabbedPanel.alignment = ["fill", "center"];
+    var horizontalTabbedPanel = dialogMainGroup.add("tabbedpanel", undefined, undefined, { name: "horizontalTabbedPanel" });
+    horizontalTabbedPanel.alignChildren = "fill";
+    horizontalTabbedPanel.preferredSize.width = 363.047;
+    horizontalTabbedPanel.margins = 0;
+    horizontalTabbedPanel.alignment = ["fill", "center"];
 
     // TABOPTIONS
     // ==========
-    var tabOptions = verticalTabbedPanel_innerwrap.add("group", undefined, { name: "tabOptions" });
+    var tabOptions = horizontalTabbedPanel.add("tab", undefined, undefined, { name: "tabOptions" });
     tabOptions.text = "OPTIONS";
     tabOptions.orientation = "row";
     tabOptions.alignChildren = ["fill", "fill"];
     tabOptions.spacing = 10;
-    tabOptions.margins = 0;
+    tabOptions.margins = 10;
 
     // OPTIONSMAINGROUP
     // ================
@@ -120,6 +118,7 @@ if (app.documents.length > 0) {
     topCheckbox.onClick = function () {
         topCheckbox.active = true;
         topCheckbox.active = false;
+        activateSpecifyButton();
     };
 
     // DIMENSIONGROUP
@@ -138,6 +137,7 @@ if (app.documents.length > 0) {
     leftCheckbox.onClick = function () {
         leftCheckbox.active = true;
         leftCheckbox.active = false;
+        activateSpecifyButton();
     };
 
     var rightCheckbox = dimensionGroup.add("checkbox", undefined, undefined, { name: "rightCheckbox" });
@@ -147,6 +147,7 @@ if (app.documents.length > 0) {
     rightCheckbox.onClick = function () {
         rightCheckbox.active = true;
         rightCheckbox.active = false;
+        activateSpecifyButton();
     };
 
     // DIMENSIONPANEL
@@ -159,6 +160,7 @@ if (app.documents.length > 0) {
     bottomCheckbox.onClick = function () {
         bottomCheckbox.active = true;
         bottomCheckbox.active = false;
+        activateSpecifyButton();
     };
 
     var dimensionsDivider = dimensionPanel.add("panel", undefined, undefined, { name: "dimensionsDivider" });
@@ -200,6 +202,8 @@ if (app.documents.length > 0) {
             leftCheckbox.value = false;
             leftCheckbox.enabled = true;
         }
+
+        activateSpecifyButton();
     };
 
     // MULTIPLEOBJECTSPANEL
@@ -278,12 +282,12 @@ if (app.documents.length > 0) {
 
     // TABSTYLES
     // =========
-    var tabStyles = verticalTabbedPanel_innerwrap.add("group", undefined, { name: "tabStyles" });
+    var tabStyles = horizontalTabbedPanel.add("tab", undefined, undefined, { name: "tabStyles" });
     tabStyles.text = "STYLES";
     tabStyles.orientation = "column";
     tabStyles.alignChildren = ["fill", "fill"];
     tabStyles.spacing = 10;
-    tabStyles.margins = 0;
+    tabStyles.margins = 10;
 
     // LABELSTYLESPANEL
     // ============
@@ -530,110 +534,70 @@ if (app.documents.length > 0) {
     var headTailSizeUnitsLabelText = headTailSizeGroup.add("statictext", undefined, undefined, { name: "headTailSizeUnitsLabelText" });
     headTailSizeUnitsLabelText.text = getRulerUnits();
 
-    // TABDEFAULTS
-    // ===========
-    var tabDefaults = verticalTabbedPanel_innerwrap.add("group", undefined, { name: "tabDefaults" });
-    tabDefaults.text = "RESTORE DEFAULTS";
-    tabDefaults.orientation = "column";
-    tabDefaults.alignChildren = ["fill", "fill"];
-    tabDefaults.spacing = 10;
-    tabDefaults.margins = 0;
+    // TABUPDATES
+    // ==========
+    var tabUpdates = horizontalTabbedPanel.add("tab", undefined, undefined, { name: "tabUpdates" });
+    tabUpdates.text = "UPDATES";
+    tabUpdates.orientation = "column";
+    tabUpdates.alignChildren = ["center", "fill"];
+    tabUpdates.spacing = 20;
+    tabUpdates.margins = 10;
 
-    // VERTICALTABBEDPANEL
-    // ===================
-    var verticalTabbedPanel_tabs = [tabOptions, tabStyles, tabDefaults];
+    // UPDATESGROUP
+    // ============
+    var updatesGroup = tabUpdates.add("group", undefined, { name: "updatesGroup" });
+    updatesGroup.orientation = "column";
+    updatesGroup.alignChildren = ["center", "center"];
+    updatesGroup.spacing = 10;
+    updatesGroup.margins = [0, 0, 0, 20];
+    updatesGroup.alignment = ["center", "center"];
 
-    for (var i = 0; i < verticalTabbedPanel_tabs.length; i++) {
-        verticalTabbedPanel_tabs[i].alignment = ["fill", "fill"];
-        verticalTabbedPanel_tabs[i].visible = false;
-    }
+    var specifyUpdatesText = updatesGroup.add("statictext", undefined, undefined, { name: "specifyUpdatesText" });
+    specifyUpdatesText.text = "Click below for updates & more info:";
+    specifyUpdatesText.alignment = ["center", "center"];
 
-    verticalTabbedPanel_nav.onChange = showTab_verticalTabbedPanel;
+    var urlButton = updatesGroup.add("button", undefined, undefined, { name: "urlButton" });
+    urlButton.text = "github.com/adamdehaven/Specify";
+    urlButton.alignment = ["center", "center"];
+    urlButton.onClick = function () {
+        openURL("https://github.com/adamdehaven/Specify");
 
-    function showTab_verticalTabbedPanel() {
-        if (verticalTabbedPanel_nav.selection !== null) {
-            for (var i = verticalTabbedPanel_tabs.length - 1; i >= 0; i--) {
-                verticalTabbedPanel_tabs[i].visible = false;
-            }
-            verticalTabbedPanel_tabs[verticalTabbedPanel_nav.selection.index].visible = true;
-        }
-    }
-
-    verticalTabbedPanel_nav.selection = 0; // Activate Options tab
-    showTab_verticalTabbedPanel()
-
-    // DEFAULTSPANEL
-    // =============
-    var defaultsPanel = tabDefaults.add("panel", undefined, undefined, { name: "defaultsPanel" });
-    defaultsPanel.text = "Restore Defaults";
-    defaultsPanel.orientation = "column";
-    defaultsPanel.alignChildren = ["center", "center"];
-    defaultsPanel.spacing = 10;
-    defaultsPanel.margins = 10;
-
-    // RESTOREDEFAULTSGROUP
-    // ====================
-    var restoreDefaultsGroup = defaultsPanel.add("group", undefined, { name: "restoreDefaultsGroup" });
-    restoreDefaultsGroup.orientation = "column";
-    restoreDefaultsGroup.alignChildren = ["left", "center"];
-    restoreDefaultsGroup.spacing = 10;
-    restoreDefaultsGroup.margins = 0;
-
-    var infoText = restoreDefaultsGroup.add("statictext", undefined, undefined, { name: "infoText" });
-    infoText.text = "Options are persistent until application is closed";
-    infoText.justify = "center";
-    infoText.alignment = ["center", "center"];
-
-    var restoreDefaultsButton = restoreDefaultsGroup.add("button", undefined, undefined, { name: "restoreDefaultsButton" });
-    restoreDefaultsButton.text = "Restore All Defaults";
-    restoreDefaultsButton.preferredSize.width = 124;
-    restoreDefaultsButton.alignment = ["center", "center"];
-    restoreDefaultsButton.enabled = (setFontSize != defaultFontSize || setRed != defaultColorRed || setGreen != defaultColorGreen || setBlue != defaultColorBlue || setDecimals != defaultDecimals || setGap != defaultGap || setStrokeWidth != defaultStrokeWidth || setHeadTailSize != defaultHeadTailSize || setScale != defaultScale || setCustomUnits != defaultCustomUnits ? true : false);
-    restoreDefaultsButton.onClick = function () {
-        restoreDefaults();
+        urlButton.active = true;
+        urlButton.active = false;
     };
 
-    function restoreDefaults() {
-        restoreDefaultsButton.active = false;
-        restoreDefaultsButton.enabled = false;
+    // TABUPDATES
+    // ==========
+    var divider1 = tabUpdates.add("panel", undefined, undefined, { name: "divider1" });
+    divider1.alignment = "fill";
 
-        topCheckbox.value = false;
-        rightCheckbox.value = false;
-        bottomCheckbox.value = false;
-        leftCheckbox.value = false;
-        selectAllCheckbox.value = false;
-        units.value = setUnits;
-        fontSizeInput.text = setFontSize;
-        // colorInputRed.text = setRed;
-        // colorInputGreen.text = setGreen;
-        // colorInputBlue.text = setBlue;
-        decimalPlacesInput.text = setDecimals;
-        gapInput.text = setGap;
-        strokeWidthInput.text = setStrokeWidth;
-        headTailSizeInput.text = setHeadTailSize;
-        customScaleDropdown.selection = setScale;
-        customUnitsInput.text = setCustomUnits;
-        useCustomUnits.value = false;
-        customUnitsInput.enabled = false;
-        // Unset environmental variables
-        $.setenv("Specify_defaultUnits", "");
-        $.setenv("Specify_defaultFontSize", "");
-        $.setenv("Specify_defaultColorRed", "");
-        $.setenv("Specify_defaultColorGreen", "");
-        $.setenv("Specify_defaultColorBlue", "");
-        $.setenv("Specify_defaultDecimals", "");
-        $.setenv("Specify_defaultGap", "");
-        $.setenv("Specify_defaultStrokeWidth", "");
-        $.setenv("Specify_defaultHeadTailSize", "");
-        $.setenv("Specify_defaultScale", "");
-        $.setenv("Specify_defaultUseCustomUnits", "");
-        $.setenv("Specify_defaultCustomUnits", "");
+    // ABOUTGROUP
+    // ==========
+    var aboutGroup = tabUpdates.add("group", undefined, { name: "aboutGroup" });
+    aboutGroup.orientation = "column";
+    aboutGroup.alignChildren = ["center", "top"];
+    aboutGroup.spacing = 10;
+    aboutGroup.margins = [0, 20, 0, 0];
+    aboutGroup.alignment = ["fill", "center"];
 
-        verticalTabbedPanel_nav.selection = 0; // Activate Options tab
+    var aboutText = aboutGroup.add("statictext", undefined, undefined, { name: "aboutText" });
+    aboutText.text = "Created & maintained by @adamdehaven";
+    aboutText.justify = "center";
+    aboutText.alignment = ["center", "top"];
 
-        beep();
-        alert('The default options and styles have been restored');
+    var authorHomepageButton = aboutGroup.add("button", undefined, undefined, { name: "authorHomepageButton" });
+    authorHomepageButton.text = "adamdehaven.com";
+    authorHomepageButton.alignment = ["center", "top"];
+    authorHomepageButton.onClick = function () {
+        openURL("https://adamdehaven.com/");
+
+        authorHomepageButton.active = true;
+        authorHomepageButton.active = false;
     };
+
+    // HORIZONTALTABBEDPANEL
+    // =====================
+    horizontalTabbedPanel.selection = tabOptions; // Activate Options tab
 
     // FOOTERGROUP
     // ===========
@@ -643,11 +607,6 @@ if (app.documents.length > 0) {
     footerGroup.spacing = 5;
     footerGroup.margins = 0;
 
-    // FOOTERGROUP
-    // ============
-    var divider3 = footerGroup.add("panel", undefined, undefined, { name: "divider3" });
-    divider3.alignment = "fill";
-
     // INNERFOOTERGROUP
     // ===========
     var innerFooterGroup = footerGroup.add("group", undefined, { name: "innerFooterGroup" });
@@ -656,70 +615,44 @@ if (app.documents.length > 0) {
     innerFooterGroup.spacing = 20;
     innerFooterGroup.margins = 0;
 
-    // UPDATESGROUP
-    // ============
-    var updatesGroup = innerFooterGroup.add("group", undefined, { name: "updatesGroup" });
-    updatesGroup.orientation = "column";
-    updatesGroup.alignChildren = ["left", "center"];
-    updatesGroup.spacing = 5;
-    updatesGroup.margins = 0;
+    // RESTOREDEFAULTSGROUP
+    // ====================
+    var restoreDefaultsGroup = innerFooterGroup.add("group", undefined, { name: "restoreDefaultsGroup" });
+    restoreDefaultsGroup.orientation = "column";
+    restoreDefaultsGroup.alignChildren = ["left", "bottom"];
+    restoreDefaultsGroup.spacing = 10;
+    restoreDefaultsGroup.margins = 0;
+    restoreDefaultsGroup.alignment = ["left", "bottom"];
 
-    var specifyUpdatesText = updatesGroup.add("statictext", undefined, undefined, { name: "specifyUpdatesText" });
-    specifyUpdatesText.text = "Click below for updates & more info:";
-    specifyUpdatesText.justify = "center";
-    specifyUpdatesText.alignment = ["center", "center"];
-
-    var urlButton = updatesGroup.add("button", undefined, undefined, {name: "urlButton"});
-    urlButton.text = "https://github.com/adamdehaven/Specify";
-    urlButton.justify = "left";
-    urlButton.alignment = ["left","center"];
-    urlButton.onClick = function () {
-        openURL(urlButton.text);
-    };
-
-    function openURL(url) {
-        if (!url) {
-            return
-        }
-
-        try {
-            if (app.version > 6) {
-                if (File.fs == "Macintosh") {
-                    var body = 'tell application "Finder"\ropen location "' + url + '"\rend tell';
-                    app.doScript(body, ScriptLanguage.APPLESCRIPT_LANGUAGE);
-                } else {
-                    var body = 'dim objShell\rset objShell = CreateObject("Shell.Application")\rstr = "' + url + '"\robjShell.ShellExecute str, "", "", "open", 1 '
-                    app.doScript(body, ScriptLanguage.VISUAL_BASIC);
-                }
-            } else {
-                linkJumper = File(Folder.temp.absoluteURI + "/link.html");
-                linkJumper.open("w");
-                var linkBody = '<html><head><META HTTP-EQUIV=Refresh CONTENT="0; URL=' + url + '"></head><body> <p></body></html>'
-                linkJumper.write(linkBody);
-                linkJumper.close();
-                linkJumper.execute();
-            }
-        } catch (e) {
-            beep();
-            prompt("Open your browser and visit the URL below for more information", url);
-        } finally {
-            urlButton.active = true;
-            urlButton.active = false;
-        }
+    var restoreDefaultsButton = restoreDefaultsGroup.add("button", undefined, undefined, { name: "restoreDefaultsButton" });
+    restoreDefaultsButton.text = "Reset";
+    restoreDefaultsButton.helpTip = "Reset all options and styles.";
+    restoreDefaultsButton.alignment = ["center", "center"];
+    restoreDefaultsButton.justify = "left";
+    restoreDefaultsButton.enabled = (setFontSize != defaultFontSize || setRed != defaultColorRed || setGreen != defaultColorGreen || setBlue != defaultColorBlue || setDecimals != defaultDecimals || setGap != defaultGap || setStrokeWidth != defaultStrokeWidth || setHeadTailSize != defaultHeadTailSize || setScale != defaultScale || setCustomUnits != defaultCustomUnits ? true : false);
+    restoreDefaultsButton.onClick = function () {
+        restoreDefaults();
     };
 
     // BUTTONGROUP
     // ===========
     var buttonGroup = innerFooterGroup.add("group", undefined, { name: "buttonGroup" });
     buttonGroup.orientation = "row";
-    buttonGroup.alignChildren = ["left", "bottom"];
+    buttonGroup.alignChildren = ["right", "bottom"];
     buttonGroup.spacing = 10;
-    buttonGroup.margins = [40, 0, 0, 0];
+    buttonGroup.margins = [87, 0, 0, 0];
     buttonGroup.alignment = ["left", "bottom"];
+
+    var cancelButton = buttonGroup.add("button", undefined, undefined, { name: "cancelButton" });
+    cancelButton.text = "Cancel";
+    cancelButton.alignment = ["right", "bottom"];
+    cancelButton.onClick = function () {
+        specifyDialogBox.close();
+    };
 
     var specifyButton = buttonGroup.add("button", undefined, undefined, { name: "specifyButton" });
     specifyButton.text = "Specify Object(s)";
-    specifyButton.preferredSize.height = 40;
+    activateSpecifyButton();
     specifyButton.onClick = function () {
         startSpec();
     };
@@ -835,23 +768,23 @@ if (app.documents.length > 0) {
             // Close dialog
             specifyDialogBox.close();
         } else if (!top && !left && !right && !bottom) {
-            verticalTabbedPanel_nav.selection = 0; // Activate Options tab
+            horizontalTabbedPanel.selection = tabOptions; // Activate Options tab
             beep();
             alert("Please select at least 1 dimension to draw.");
         } else if (!validFontSize) {
-            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
+            horizontalTabbedPanel.selection = tabStyles; // Activate Styles tab
             // If fontSizeInput.text does not match regex
             beep();
             alert("Please enter a valid font size. \n0.002 - 999.999");
             fontSizeInput.active = true;
             fontSizeInput.text = setFontSize;
         } else if (parseFloat(fontSizeInput.text, 10) <= 0.001) {
-            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
+            horizontalTabbedPanel.selection = tabStyles; // Activate Styles tab
             beep();
             alert("Font size must be greater than 0.001.");
             fontSizeInput.active = true;
         } /*else if (!validRedColor || !validGreenColor || !validBlueColor) {
-            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
+            horizontalTabbedPanel.selection = tabStyles; // Activate Styles tab
             // If RGB inputs are not numeric
             beep();
             alert("Please enter a valid RGB color.");
@@ -860,28 +793,28 @@ if (app.documents.length > 0) {
             colorInputGreen.text = defaultColorGreen;
             colorInputBlue.text = defaultColorBlue;
         }*/ else if (!validDecimalPlaces) {
-            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
+            horizontalTabbedPanel.selection = tabStyles; // Activate Styles tab
             // If decimalPlacesInput.text is not numeric
             beep();
             alert("Decimal places must range from 0 - 4.");
             decimalPlacesInput.active = true;
             decimalPlacesInput.text = setDecimals;
         } else if (!validGap) {
-            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
+            horizontalTabbedPanel.selection = tabStyles; // Activate Styles tab
             // If gapInput.text does not match regex decimals/integers
             beep();
             alert("Gap size must be a whole number (e.g. 22), or a number with decimals (e.g. 18.4)");
             gapInput.active = true;
             gapInput.text = setGap;
         } else if (!validStrokeWidth) {
-            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
+            horizontalTabbedPanel.selection = tabStyles; // Activate Styles tab
             // If strokeWidthInput.text does not match regex decimals/integers
             beep();
             alert("Stroke width must be a whole number (e.g. 22), or a number with decimals (e.g. 18.4)");
             headTailSizeInput.active = true;
             headTailSizeInput.text = setHeadTailSize;
         } else if (!validHeadTailSize) {
-            verticalTabbedPanel_nav.selection = 1; // Activate Styles tab
+            horizontalTabbedPanel.selection = tabStyles; // Activate Styles tab
             // If headTailSizeInput.text does not match regex decimals/integers
             beep();
             alert("Head & tail size must be a whole number (e.g. 22), or a number with decimals (e.g. 18.4)");
@@ -1288,6 +1221,86 @@ if (app.documents.length > 0) {
                 rulerUnits = "pt";
         }
         return rulerUnits;
+    };
+
+    function activateSpecifyButton() {
+        specifyButton.enabled = (topCheckbox.value || rightCheckbox.value || bottomCheckbox.value || leftCheckbox.value || selectAllCheckbox.value ? true : false);
+
+        if (specifyButton.enabled) {
+            specifyButton.helpTip = ""
+        } else {
+            specifyButton.helpTip = "Select at least 1 dimension in the Options tab"
+        }
+    };
+
+    function openURL(url) {
+        if (!url) {
+            return
+        }
+
+        try {
+            if (app.version > 6) {
+                if (File.fs == "Macintosh") {
+                    var body = 'tell application "Finder"\ropen location "' + url + '"\rend tell';
+                    app.doScript(body, ScriptLanguage.APPLESCRIPT_LANGUAGE);
+                } else {
+                    var body = 'dim objShell\rset objShell = CreateObject("Shell.Application")\rstr = "' + url + '"\robjShell.ShellExecute str, "", "", "open", 1 '
+                    app.doScript(body, ScriptLanguage.VISUAL_BASIC);
+                }
+            } else {
+                linkJumper = File(Folder.temp.absoluteURI + "/link.html");
+                linkJumper.open("w");
+                var linkBody = '<html><head><META HTTP-EQUIV=Refresh CONTENT="0; URL=' + url + '"></head><body> <p></body></html>'
+                linkJumper.write(linkBody);
+                linkJumper.close();
+                linkJumper.execute();
+            }
+        } catch (e) {
+            beep();
+            prompt("Open your browser and visit the URL below for more information", url);
+        }
+    };
+
+    function restoreDefaults() {
+        topCheckbox.value = false;
+        rightCheckbox.value = false;
+        bottomCheckbox.value = false;
+        leftCheckbox.value = false;
+        selectAllCheckbox.value = false;
+        units.value = setUnits;
+        fontSizeInput.text = setFontSize;
+        // colorInputRed.text = setRed;
+        // colorInputGreen.text = setGreen;
+        // colorInputBlue.text = setBlue;
+        decimalPlacesInput.text = setDecimals;
+        gapInput.text = setGap;
+        strokeWidthInput.text = setStrokeWidth;
+        headTailSizeInput.text = setHeadTailSize;
+        customScaleDropdown.selection = setScale;
+        customUnitsInput.text = setCustomUnits;
+        useCustomUnits.value = false;
+        customUnitsInput.enabled = false;
+        // Unset environmental variables
+        $.setenv("Specify_defaultUnits", "");
+        $.setenv("Specify_defaultFontSize", "");
+        $.setenv("Specify_defaultColorRed", "");
+        $.setenv("Specify_defaultColorGreen", "");
+        $.setenv("Specify_defaultColorBlue", "");
+        $.setenv("Specify_defaultDecimals", "");
+        $.setenv("Specify_defaultGap", "");
+        $.setenv("Specify_defaultStrokeWidth", "");
+        $.setenv("Specify_defaultHeadTailSize", "");
+        $.setenv("Specify_defaultScale", "");
+        $.setenv("Specify_defaultUseCustomUnits", "");
+        $.setenv("Specify_defaultCustomUnits", "");
+
+        horizontalTabbedPanel.selection = tabOptions; // Activate Options tab
+
+        beep();
+        alert('The default options and styles have been restored.');
+
+        restoreDefaultsButton.active = false;
+        restoreDefaultsButton.enabled = false;
     };
 
     //
