@@ -117,6 +117,10 @@ if (app.documents.length > 0) {
     topCheckbox.text = "Top";
     topCheckbox.alignment = ["center", "top"];
     topCheckbox.value = false;
+    topCheckbox.onClick = function () {
+        topCheckbox.active = true;
+        topCheckbox.active = false;
+    };
 
     // DIMENSIONGROUP
     // ==============
@@ -131,11 +135,19 @@ if (app.documents.length > 0) {
     leftCheckbox.helpTip = "Dimension the left side of the object(s).";
     leftCheckbox.text = "Left";
     leftCheckbox.value = false;
+    leftCheckbox.onClick = function () {
+        leftCheckbox.active = true;
+        leftCheckbox.active = false;
+    };
 
     var rightCheckbox = dimensionGroup.add("checkbox", undefined, undefined, { name: "rightCheckbox" });
     rightCheckbox.helpTip = "Dimension the right side of the object(s).";
     rightCheckbox.text = "Right";
     rightCheckbox.value = false;
+    rightCheckbox.onClick = function () {
+        rightCheckbox.active = true;
+        rightCheckbox.active = false;
+    };
 
     // DIMENSIONPANEL
     // ==============
@@ -144,6 +156,10 @@ if (app.documents.length > 0) {
     bottomCheckbox.text = "Bottom";
     bottomCheckbox.alignment = ["center", "top"];
     bottomCheckbox.value = false;
+    bottomCheckbox.onClick = function () {
+        bottomCheckbox.active = true;
+        bottomCheckbox.active = false;
+    };
 
     var dimensionsDivider = dimensionPanel.add("panel", undefined, undefined, { name: "dimensionsDivider" });
     dimensionsDivider.alignment = "fill";
@@ -154,6 +170,9 @@ if (app.documents.length > 0) {
     selectAllCheckbox.alignment = ["center", "top"];
     selectAllCheckbox.value = false;
     selectAllCheckbox.onClick = function () {
+        selectAllCheckbox.active = true;
+        selectAllCheckbox.active = false;
+
         if (selectAllCheckbox.value) {
             // Select All is checked
             topCheckbox.value = true;
@@ -186,7 +205,7 @@ if (app.documents.length > 0) {
     // MULTIPLEOBJECTSPANEL
     // ====================
     var multipleObjectsPanel;
-    var between;
+    var betweenCheckbox;
 
     // If exactly 2 objects are selected, give user option to dimension BETWEEN them
     if (selectedItems == 2) {
@@ -198,10 +217,14 @@ if (app.documents.length > 0) {
         multipleObjectsPanel.spacing = 10;
         multipleObjectsPanel.margins = 20;
 
-        between = multipleObjectsPanel.add("checkbox", undefined, undefined, { name: "between" });
-        between.helpTip = "When checked, dimensions the distance between\nthe 2 objects for the selected dimensions.";
-        between.text = "Dimension between selected objects";
-        between.value = false;
+        betweenCheckbox = multipleObjectsPanel.add("checkbox", undefined, undefined, { name: "betweenCheckbox" });
+        betweenCheckbox.helpTip = "When checked, dimensions the distance between\nthe 2 objects for the selected dimensions.";
+        betweenCheckbox.text = "Dimension between selected objects";
+        betweenCheckbox.value = false;
+        betweenCheckbox.onClick = function () {
+            betweenCheckbox.active = true;
+            betweenCheckbox.active = false;
+        };
     }
 
 
@@ -276,6 +299,9 @@ if (app.documents.length > 0) {
     units.text = "Include units in label";
     units.value = defaultUnits;
     units.onClick = function () {
+        units.active = true;
+        units.active = false;
+
         if (units.value == false) {
             useCustomUnits.value = false;
             useCustomUnits.enabled = false;
@@ -305,6 +331,9 @@ if (app.documents.length > 0) {
         useCustomUnits.enabled = true;
     }
     useCustomUnits.onClick = function () {
+        useCustomUnits.active = true;
+        useCustomUnits.active = false;
+
         if (useCustomUnits.value == true) {
             customUnitsInput.enabled = true;
         } else {
@@ -565,6 +594,9 @@ if (app.documents.length > 0) {
     };
 
     function restoreDefaults() {
+        restoreDefaultsButton.active = false;
+        restoreDefaultsButton.enabled = false;
+
         topCheckbox.value = false;
         rightCheckbox.value = false;
         bottomCheckbox.value = false;
@@ -583,8 +615,6 @@ if (app.documents.length > 0) {
         customUnitsInput.text = setCustomUnits;
         useCustomUnits.value = false;
         customUnitsInput.enabled = false;
-        restoreDefaultsButton.active = false;
-        restoreDefaultsButton.enabled = false;
         // Unset environmental variables
         $.setenv("Specify_defaultUnits", "");
         $.setenv("Specify_defaultFontSize", "");
@@ -673,6 +703,7 @@ if (app.documents.length > 0) {
             beep();
             prompt("Open your browser and visit the URL below for more information", url);
         } finally {
+            urlButton.active = true;
             urlButton.active = false;
         }
     };
@@ -856,7 +887,7 @@ if (app.documents.length > 0) {
             alert("Head & tail size must be a whole number (e.g. 22), or a number with decimals (e.g. 18.4)");
             headTailSizeInput.active = true;
             headTailSizeInput.text = setHeadTailSize;
-        } else if (selectedItems == 2 && between.value) {
+        } else if (selectedItems == 2 && betweenCheckbox.value) {
             if (top) specDouble(objectsToSpec[0], objectsToSpec[1], "Top");
             if (left) specDouble(objectsToSpec[0], objectsToSpec[1], "Left");
             if (right) specDouble(objectsToSpec[0], objectsToSpec[1], "Right");
