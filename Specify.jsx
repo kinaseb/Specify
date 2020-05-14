@@ -437,6 +437,12 @@ if (app.documents.length > 0) {
     var colorLabel = labelColorGroup.add("statictext", undefined, undefined, { name: "colorLabel" });
     colorLabel.text = "Color:";
 
+    // Measurement line and text color in RGB
+    var color = new RGBColor;
+    color.red = defaultColorRed;
+    color.green = defaultColorGreen;
+    color.blue = defaultColorBlue;
+
     /**
      * START COLOR PICKER
      * =================================
@@ -450,32 +456,32 @@ if (app.documents.length > 0) {
         }
     }
 
-
-
     var colorPickerButton = labelColorGroup.add('iconbutton', undefined, undefined, { name: 'colorPickerButton', style: 'toolbutton' });
     colorPickerButton.size = [135, 20];
     var colRGB = [(parseInt(defaultColorRed) / 255), (parseInt(defaultColorGreen) / 255), (parseInt(defaultColorBlue) / 255)];
     colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, colRGB, 1);
     colorPickerButton.text = "Click to choose color";
-    colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, [1, 1, 1], 1);
+    colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, getColorPickerButtonTextColor(color.red, color.green, color.blue), 1);
     colorPickerButton.onDraw = customDraw;
     colorPickerButton.helpTip = "Select the color for the dimension label(s).";
 
-    color.red = defaultColorRed;
-    color.green = defaultColorGreen;
-    color.blue = defaultColorBlue;
-
     var resultColor = colRGB.toString();
-    var colorSet = false;
     colorPickerButton.onClick = function () {
-        colorSet = true;
-        resultColor = colorPicker();
+        resultColor = colorPicker([color.red || setRed, color.green || setGreen, color.blue || setBlue], { name: 'Specify: Choose label color', version: '' });
+        // Color has been picked
+        color.red = resultColor[0] * 255;
+        color.green = resultColor[1] * 255;
+        color.blue = resultColor[2] * 255;
+        $.setenv("Specify_defaultColorRed", color.red);
+        $.setenv("Specify_defaultColorGreen", color.green);
+        $.setenv("Specify_defaultColorBlue", color.blue);
+        // Update colorPickerButton
         colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, resultColor);
+        colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, getColorPickerButtonTextColor(color.red, color.green, color.blue), 1);
         colorPickerButton.onDraw = customDraw;
         // specifyDialogBox.update();
         updatePanel(specifyDialogBox);
         restoreDefaultsButton.enabled = true;
-        infoText.enabled = true;
     }
 
     function updatePanel(win) {
@@ -726,9 +732,6 @@ if (app.documents.length > 0) {
         specsLayer.name = "SPECS";
     }
 
-    // Measurement line and text color in RGB
-    var color = new RGBColor;
-
     // Declare global decimals var
     var decimals;
 
@@ -769,17 +772,6 @@ if (app.documents.length > 0) {
         var validRedColor = /^[0-9]{1,3}$/.test(color.red) && parseInt(color.red) > -1 && parseInt(color.red) < 256;
         var validGreenColor = /^[0-9]{1,3}$/.test(color.green) && parseInt(color.green) > -1 && parseInt(color.green) < 256;
         var validBlueColor = /^[0-9]{1,3}$/.test(color.blue) && parseInt(color.blue) > -1 && parseInt(color.blue) < 256;
-
-        // If colors are valid, set variables
-        if (colorSet && validRedColor && validGreenColor && validBlueColor) {
-            color.red = resultColor[0] * 255;
-            color.green = resultColor[1] * 255;
-            color.blue = resultColor[2] * 255;
-            $.setenv("Specify_defaultColorRed", color.red);
-            $.setenv("Specify_defaultColorGreen", color.green);
-            $.setenv("Specify_defaultColorBlue", color.blue);
-            colorSet = false;
-        }
 
         var validDecimalPlaces = /^[0-4]{1}$/.test(decimalPlacesInput.text);
         if (validDecimalPlaces) {
@@ -839,16 +831,15 @@ if (app.documents.length > 0) {
             beep();
             alert("Font size must be greater than 0.001.");
             fontSizeInput.active = true;
-        } /*else if (!validRedColor || !validGreenColor || !validBlueColor) {
+        } else if (!validRedColor || !validGreenColor || !validBlueColor) {
             horizontalTabbedPanel.selection = tabStyles; // Activate Styles tab
             // If RGB inputs are not numeric
             beep();
             alert("Please enter a valid RGB color.");
-            colorInputRed.active = true;
-            colorInputRed.text = defaultColorRed;
-            colorInputGreen.text = defaultColorGreen;
-            colorInputBlue.text = defaultColorBlue;
-        }*/ else if (!validDecimalPlaces) {
+            color.red = defaultColorRed;
+            color.green = defaultColorGreen;
+            color.blue = defaultColorBlue;
+        } else if (!validDecimalPlaces) {
             horizontalTabbedPanel.selection = tabStyles; // Activate Styles tab
             // If decimalPlacesInput.text is not numeric
             beep();
@@ -1327,9 +1318,9 @@ if (app.documents.length > 0) {
         customUnitsInput.enabled = false;
         decimalPlacesInput.text = setDecimals;
         fontSizeInput.text = setFontSize;
-        // colorInputRed.text = setRed;
-        // colorInputGreen.text = setGreen;
-        // colorInputBlue.text = setBlue;
+        color.red = setRed;
+        color.green = setGreen;
+        color.blue = setBlue;
         gapInput.text = setGap;
         strokeWidthInput.text = setStrokeWidth;
         headTailSizeInput.text = setHeadTailSize;
@@ -1348,11 +1339,35 @@ if (app.documents.length > 0) {
         $.setenv("Specify_defaultUseCustomUnits", "");
         $.setenv("Specify_defaultCustomUnits", "");
 
+        // Reset colorPickerButton
+        colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, [(parseInt(setRed) / 255), (parseInt(setGreen) / 255), (parseInt(setBlue) / 255)], 1);
+        colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, getColorPickerButtonTextColor(color.red, color.green, color.blue), 1);
+        colorPickerButton.onDraw = customDraw;
+
         beep();
         alert('The default options and styles have been restored.');
 
         restoreDefaultsButton.active = false;
         restoreDefaultsButton.enabled = false;
+    };
+
+    function getColorPickerButtonTextColor(red, green, blue) {
+        var rgb = [parseInt(red), parseInt(green), parseInt(blue)];
+
+        var hsp = Math.sqrt(
+            0.299 * (rgb[0] * rgb[0]) +
+            0.587 * (rgb[1] * rgb[1]) +
+            0.114 * (rgb[2] * rgb[2])
+        );
+
+        // Using the HSP value, determine whether the color is light or dark
+        if (hsp > 127.5) {
+            // return black
+            return [(0 / 255), (0 / 255), (0 / 255)];
+        } else {
+            // return white
+            return [(255 / 255), (255 / 255), (255 / 255)];
+        }
     };
 
     //
