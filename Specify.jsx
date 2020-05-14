@@ -166,7 +166,7 @@ if (app.documents.length > 0) {
 
     var selectAllCheckbox = dimensionPanel.add("checkbox", undefined, undefined, { name: "selectAllCheckbox" });
     selectAllCheckbox.helpTip = "Dimension all sides of the object(s).";
-    selectAllCheckbox.text = "Select All";
+    selectAllCheckbox.text = "All Sides";
     selectAllCheckbox.alignment = ["center", "top"];
     selectAllCheckbox.value = false;
     selectAllCheckbox.onClick = function () {
@@ -295,7 +295,7 @@ if (app.documents.length > 0) {
     labelStylesPanel.margins = 20;
 
     var units = labelStylesPanel.add("checkbox", undefined, undefined, { name: "units" });
-    units.helpTip = "When checked, inserts the units in the label alongside\nthe outputted dimension.\nExample: 220 px";
+    units.helpTip = "When checked, inserts the units in the label alongside\nthe dimension measurement.\nExample: 220 px";
     units.text = "Include units in label";
     units.value = defaultUnits;
     units.onClick = function () {
@@ -449,7 +449,7 @@ if (app.documents.length > 0) {
     gapLabel.text = "Gap between label and object:";
 
     var gapInput = gapGroup.add('edittext {justify: "right", properties: {name: "gapInput"}}');
-    gapInput.helpTip = "Enter the desired gap between the dimension label(s) and the object.";
+    gapInput.helpTip = "Enter the size of the desired gap between the dimension label(s) and the object.";
     gapInput.characters = 6;
     gapInput.preferredSize.width = 60;
     gapInput.text = defaultGap;
@@ -477,7 +477,7 @@ if (app.documents.length > 0) {
     strokeWidthGroup.margins = 0;
 
     var strokeWidthLabel = strokeWidthGroup.add("statictext", undefined, undefined, { name: "strokeWidthLabel" });
-    strokeWidthLabel.text = "Line stroke width:";
+    strokeWidthLabel.text = "Stroke width:";
 
     var strokeWidthInput = strokeWidthGroup.add('edittext {justify: "right", properties: {name: "strokeWidthInput"}}');
     strokeWidthInput.helpTip = "Enter the desired stroke width of the dimension line.";
@@ -508,7 +508,7 @@ if (app.documents.length > 0) {
     headTailSizeGroup.margins = 0;
 
     var headTailSizeLabel = headTailSizeGroup.add("statictext", undefined, undefined, { name: "headTailSizeLabel" });
-    headTailSizeLabel.text = "Line head & tail length:";
+    headTailSizeLabel.text = "Head & tail length:";
 
     var headTailSizeInput = headTailSizeGroup.add('edittext {justify: "right", properties: {name: "headTailSizeInput"}}');
     headTailSizeInput.helpTip = "Enter the desired length of the line at both ends of the dimension line.";
