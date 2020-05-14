@@ -565,6 +565,11 @@ if (app.documents.length > 0) {
     };
 
     function restoreDefaults() {
+        topCheckbox.value = false;
+        rightCheckbox.value = false;
+        bottomCheckbox.value = false;
+        leftCheckbox.value = false;
+        selectAllCheckbox.value = false;
         units.value = setUnits;
         fontSizeInput.text = setFontSize;
         // colorInputRed.text = setRed;
