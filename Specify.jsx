@@ -21,9 +21,21 @@ if (app.documents.length > 0) {
     //
     // Defaults
     // ===========================
+    // Scale
+    var setScale = 0;
+    var defaultScale = $.getenv("Specify_defaultScale") ? $.getenv("Specify_defaultScale") : setScale;
     // Units
     var setUnits = true;
     var defaultUnits = $.getenv("Specify_defaultUnits") ? convertToBoolean($.getenv("Specify_defaultUnits")) : setUnits;
+    // Use Custom Units
+    var setUseCustomUnits = false;
+    var defaultUseCustomUnits = $.getenv("Specify_defaultUseCustomUnits") ? convertToBoolean($.getenv("Specify_defaultUseCustomUnits")) : setUseCustomUnits;
+    // Custom Units
+    var setCustomUnits = getRulerUnits();
+    var defaultCustomUnits = $.getenv("Specify_defaultCustomUnits") ? $.getenv("Specify_defaultCustomUnits") : setCustomUnits;
+    // Decimals
+    var setDecimals = 2;
+    var defaultDecimals = $.getenv("Specify_defaultDecimals") ? $.getenv("Specify_defaultDecimals") : setDecimals;
     // Font Size
     var setFontSize = 8;
     var defaultFontSize = $.getenv("Specify_defaultFontSize") ? convertToUnits($.getenv("Specify_defaultFontSize")).toFixed(3) : setFontSize;
@@ -34,18 +46,7 @@ if (app.documents.length > 0) {
     var defaultColorGreen = $.getenv("Specify_defaultColorGreen") ? $.getenv("Specify_defaultColorGreen") : setGreen;
     var setBlue = 227;
     var defaultColorBlue = $.getenv("Specify_defaultColorBlue") ? $.getenv("Specify_defaultColorBlue") : setBlue;
-    // Decimals
-    var setDecimals = 2;
-    var defaultDecimals = $.getenv("Specify_defaultDecimals") ? $.getenv("Specify_defaultDecimals") : setDecimals;
-    // Scale
-    var setScale = 0;
-    var defaultScale = $.getenv("Specify_defaultScale") ? $.getenv("Specify_defaultScale") : setScale;
-    // Use Custom Units
-    var setUseCustomUnits = false;
-    var defaultUseCustomUnits = $.getenv("Specify_defaultUseCustomUnits") ? convertToBoolean($.getenv("Specify_defaultUseCustomUnits")) : setUseCustomUnits;
-    // Custom Units
-    var setCustomUnits = getRulerUnits();
-    var defaultCustomUnits = $.getenv("Specify_defaultCustomUnits") ? $.getenv("Specify_defaultCustomUnits") : setCustomUnits;
+
     // Gap
     var setGap = 4;
     var defaultGap = $.getenv("Specify_defaultGap") ? $.getenv("Specify_defaultGap") : setGap;
@@ -303,6 +304,8 @@ if (app.documents.length > 0) {
     units.text = "Include units in label";
     units.value = defaultUnits;
     units.onClick = function () {
+        restoreDefaultsButton.enabled = true;
+
         units.active = true;
         units.active = false;
 
@@ -335,6 +338,7 @@ if (app.documents.length > 0) {
         useCustomUnits.enabled = true;
     }
     useCustomUnits.onClick = function () {
+        restoreDefaultsButton.enabled = true;
         useCustomUnits.active = true;
         useCustomUnits.active = false;
 
@@ -1262,19 +1266,21 @@ if (app.documents.length > 0) {
         bottomCheckbox.value = false;
         leftCheckbox.value = false;
         selectAllCheckbox.value = false;
+        betweenCheckbox.value = false;
+        customScaleDropdown.selection = setScale;
         units.value = setUnits;
+        useCustomUnits.value = setUseCustomUnits;
+        customUnitsInput.text = setCustomUnits;
+        customUnitsInput.enabled = false;
+        decimalPlacesInput.text = setDecimals;
         fontSizeInput.text = setFontSize;
         // colorInputRed.text = setRed;
         // colorInputGreen.text = setGreen;
         // colorInputBlue.text = setBlue;
-        decimalPlacesInput.text = setDecimals;
         gapInput.text = setGap;
         strokeWidthInput.text = setStrokeWidth;
         headTailSizeInput.text = setHeadTailSize;
-        customScaleDropdown.selection = setScale;
-        customUnitsInput.text = setCustomUnits;
-        useCustomUnits.value = false;
-        customUnitsInput.enabled = false;
+
         // Unset environmental variables
         $.setenv("Specify_defaultUnits", "");
         $.setenv("Specify_defaultFontSize", "");
@@ -1288,8 +1294,6 @@ if (app.documents.length > 0) {
         $.setenv("Specify_defaultScale", "");
         $.setenv("Specify_defaultUseCustomUnits", "");
         $.setenv("Specify_defaultCustomUnits", "");
-
-        horizontalTabbedPanel.selection = tabOptions; // Activate Options tab
 
         beep();
         alert('The default options and styles have been restored.');
