@@ -357,7 +357,7 @@ if (app.documents.length > 0) {
     } else {
         customUnitsInput.enabled = false;
     }
-    customUnitsInput.onChange = function () {
+    customUnitsInput.onChanging = function () {
         restoreDefaultsButton.enabled = true;
     };
     customUnitsInput.onDeactivate = function () {
@@ -382,7 +382,7 @@ if (app.documents.length > 0) {
     decimalPlacesInput.characters = 1;
     decimalPlacesInput.preferredSize.width = 40;
     decimalPlacesInput.text = defaultDecimals;
-    decimalPlacesInput.onChange = function () {
+    decimalPlacesInput.onChanging = function () {
         restoreDefaultsButton.enabled = true;
         decimalPlacesInput.text = decimalPlacesInput.text.replace(/[^0-9]/g, "");
     };
@@ -403,7 +403,7 @@ if (app.documents.length > 0) {
     fontSizeInput.text = defaultFontSize;
     fontSizeInput.characters = 5;
     fontSizeInput.preferredSize.width = 60;
-    fontSizeInput.onChange = function () {
+    fontSizeInput.onChanging = function () {
         restoreDefaultsButton.enabled = true;
     }
     fontSizeInput.onDeactivate = function () {
@@ -457,7 +457,7 @@ if (app.documents.length > 0) {
     gapInput.characters = 6;
     gapInput.preferredSize.width = 60;
     gapInput.text = defaultGap;
-    gapInput.onChange = function () {
+    gapInput.onChanging = function () {
         restoreDefaultsButton.enabled = true;
     };
     gapInput.onDeactivate = function () {
@@ -488,7 +488,7 @@ if (app.documents.length > 0) {
     strokeWidthInput.characters = 6;
     strokeWidthInput.preferredSize.width = 60;
     strokeWidthInput.text = defaultStrokeWidth;
-    strokeWidthInput.onChange = function () {
+    strokeWidthInput.onChanging = function () {
         restoreDefaultsButton.enabled = true;
     };
     strokeWidthInput.onDeactivate = function () {
@@ -519,7 +519,7 @@ if (app.documents.length > 0) {
     headTailSizeInput.characters = 6;
     headTailSizeInput.preferredSize.width = 60;
     headTailSizeInput.text = defaultHeadTailSize;
-    headTailSizeInput.onChange = function () {
+    headTailSizeInput.onChanging = function () {
         restoreDefaultsButton.enabled = true;
     };
     headTailSizeInput.onDeactivate = function () {
@@ -1224,13 +1224,8 @@ if (app.documents.length > 0) {
     };
 
     function activateSpecifyButton() {
-        specifyButton.enabled = (topCheckbox.value || rightCheckbox.value || bottomCheckbox.value || leftCheckbox.value || selectAllCheckbox.value ? true : false);
-
-        if (specifyButton.enabled) {
-            specifyButton.helpTip = ""
-        } else {
-            specifyButton.helpTip = "Select at least 1 dimension in the Options tab"
-        }
+        // Update helpTip
+        specifyButton.helpTip = (topCheckbox.value || rightCheckbox.value || bottomCheckbox.value || leftCheckbox.value || selectAllCheckbox.value ? "" : "Select at least 1 dimension in the Options tab");
     };
 
     function openURL(url) {
