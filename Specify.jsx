@@ -478,13 +478,8 @@ if (app.documents.length > 0) {
         colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, resultColor);
         colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, getColorPickerButtonTextColor(color.red, color.green, color.blue), 1);
         colorPickerButton.onDraw = customDraw;
-        // specifyDialogBox.update();
         updatePanel(specifyDialogBox);
         restoreDefaultsButton.enabled = true;
-    }
-
-    function updatePanel(win) {
-        specifyDialogBox.layout.layout(true);
     }
 
     /**
@@ -1342,12 +1337,17 @@ if (app.documents.length > 0) {
         colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, [(parseInt(setRed) / 255), (parseInt(setGreen) / 255), (parseInt(setBlue) / 255)], 1);
         colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, getColorPickerButtonTextColor(color.red, color.green, color.blue), 1);
         colorPickerButton.onDraw = customDraw;
+        updatePanel(specifyDialogBox);
 
         beep();
         alert('The default options and styles have been restored.');
 
         restoreDefaultsButton.active = false;
         restoreDefaultsButton.enabled = false;
+    };
+
+    function updatePanel(win) {
+        specifyDialogBox.layout.layout(true);
     };
 
     function getColorPickerButtonTextColor(red, green, blue) {
