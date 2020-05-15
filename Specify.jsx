@@ -469,9 +469,9 @@ if (app.documents.length > 0) {
     colorPickerButton.onClick = function () {
         resultColor = colorPicker([color.red || setRed, color.green || setGreen, color.blue || setBlue], { name: 'Specify: Choose label color', version: '' });
         // Color has been picked
-        color.red = resultColor[0] * 255;
-        color.green = resultColor[1] * 255;
-        color.blue = resultColor[2] * 255;
+        color.red = parseInt(Math.round(resultColor[0] * 255));
+        color.green = parseInt(Math.round(resultColor[1] * 255));
+        color.blue = parseInt(Math.round(resultColor[2] * 255));
         $.setenv("Specify_defaultColorRed", color.red);
         $.setenv("Specify_defaultColorGreen", color.green);
         $.setenv("Specify_defaultColorBlue", color.blue);
