@@ -1270,6 +1270,7 @@ if (app.documents.length > 0) {
         customScaleDropdown.selection = setScale;
         units.value = setUnits;
         useCustomUnits.value = setUseCustomUnits;
+        useCustomUnits.enabled = true;
         customUnitsInput.text = setCustomUnits;
         customUnitsInput.enabled = false;
         decimalPlacesInput.text = setDecimals;
