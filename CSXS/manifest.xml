@@ -1,25 +1,17 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<ExtensionManifest ExtensionBundleId="com.adamdehaven.specify" ExtensionBundleVersion="2.0.0" Version="9.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.adobe.CEPHTMLTEST" ExtensionBundleVersion="2.0.0" Version="6.0">
     <ExtensionList>
-        <Extension Id="com.adamdehaven.specify.extension" Version="2.0.0" />
+        <Extension Id="com.adamdehaven.specify.extension" Version="2.0.0"/>
     </ExtensionList>
     <ExecutionEnvironment>
         <HostList>
-            <Host Name="ILST" Version="17" />
-            <Host Name="ILST" Version="18" />
-            <Host Name="ILST" Version="19" />
-            <Host Name="ILST" Version="20" />
-            <Host Name="ILST" Version="21" />
-            <Host Name="ILST" Version="22" />
-            <Host Name="ILST" Version="23" />
-            <Host Name="ILST" Version="24" />
+            <Host Name="ILST" Version="[18.0,99.9]"/>
         </HostList>
         <LocaleList>
-            <Locale Code="All" />
+            <Locale Code="All"/>
         </LocaleList>
         <RequiredRuntimeList>
-            <RequiredRuntime Name="CSXS" Version="9.0" />
+            <RequiredRuntime Name="CSXS" Version="9.0"/>
         </RequiredRuntimeList>
     </ExecutionEnvironment>
     <DispatchInfoList>
@@ -28,7 +20,7 @@
                 <Resources>
                     <MainPath>./index.html</MainPath>
                     <ScriptPath>./Specify.jsx</ScriptPath>
-                    <CEFCommandLine />
+                    <CEFCommandLine/>
                 </Resources>
                 <Lifecycle>
                     <AutoVisible>true</AutoVisible>
@@ -38,11 +30,24 @@
                     <Menu>Specify</Menu>
                     <Geometry>
                         <Size>
-                            <Height>512</Height>
-                            <Width>440</Width>
+                            <Height>200</Height>
+                            <Width>200</Width>
                         </Size>
+                        <MaxSize>
+                            <Height>200</Height>
+                            <Width>200</Width>
+                        </MaxSize>
+                        <MinSize>
+                            <Height>200</Height>
+                            <Width>200</Width>
+                        </MinSize>
                     </Geometry>
-                    <Icons />
+                    <!-- <Icons>
+                        <Icon Type="Normal">./TeEx_HTML_TEST_23x23_N.png</Icon>
+                        <Icon Type="RollOver">./TeEx_HTML_TEST_23x23_R.png</Icon>
+                        <Icon Type="DarkNormal">./TeEx_HTML_TEST_23x23_DN.png</Icon>
+                        <Icon Type="DarkRollOver">./TeEx_HTML_TEST_23x23_DR.png</Icon>
+                    </Icons> -->
                 </UI>
             </DispatchInfo>
         </Extension>
