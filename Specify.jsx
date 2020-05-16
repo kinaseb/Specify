@@ -13,7 +13,7 @@
 
 // Import colorPicker
 var colorPickerPath = Folder($.fileName).parent.fsName;
-$.evalFile(new File(colorPickerPath + "./vendor/colorPicker.js"));
+$.evalFile(new File(colorPickerPath + "/vendor/colorPicker.js"));
 
 if (app.documents.length > 0) {
 
