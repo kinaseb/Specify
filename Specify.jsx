@@ -123,6 +123,11 @@ if (app.documents.length > 0) {
     topCheckbox.onClick = function () {
         topCheckbox.active = true;
         topCheckbox.active = false;
+
+        if (!topCheckbox.value) {
+            selectAllCheckbox.value = false;
+        }
+
         activateSpecifyButton();
     };
 
@@ -142,6 +147,11 @@ if (app.documents.length > 0) {
     leftCheckbox.onClick = function () {
         leftCheckbox.active = true;
         leftCheckbox.active = false;
+
+        if (!leftCheckbox.value) {
+            selectAllCheckbox.value = false;
+        }
+
         activateSpecifyButton();
     };
 
@@ -152,6 +162,11 @@ if (app.documents.length > 0) {
     rightCheckbox.onClick = function () {
         rightCheckbox.active = true;
         rightCheckbox.active = false;
+
+        if (!rightCheckbox.value) {
+            selectAllCheckbox.value = false;
+        }
+
         activateSpecifyButton();
     };
 
@@ -165,6 +180,11 @@ if (app.documents.length > 0) {
     bottomCheckbox.onClick = function () {
         bottomCheckbox.active = true;
         bottomCheckbox.active = false;
+
+        if (!bottomCheckbox.value) {
+            selectAllCheckbox.value = false;
+        }
+
         activateSpecifyButton();
     };
 
@@ -183,29 +203,21 @@ if (app.documents.length > 0) {
         if (selectAllCheckbox.value) {
             // Select All is checked
             topCheckbox.value = true;
-            topCheckbox.enabled = false;
 
             rightCheckbox.value = true;
-            rightCheckbox.enabled = false;
 
             bottomCheckbox.value = true;
-            bottomCheckbox.enabled = false;
 
             leftCheckbox.value = true;
-            leftCheckbox.enabled = false;
         } else {
             // Select All is unchecked
             topCheckbox.value = false;
-            topCheckbox.enabled = true;
 
             rightCheckbox.value = false;
-            rightCheckbox.enabled = true;
 
             bottomCheckbox.value = false;
-            bottomCheckbox.enabled = true;
 
             leftCheckbox.value = false;
-            leftCheckbox.enabled = true;
         }
 
         activateSpecifyButton();
