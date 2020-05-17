@@ -73,7 +73,7 @@ function specifyObjects() {
             // =========================================================================================== //
 
             // SPECIFYDIALOGBOX
-            var specifyDialogBox = new Window("dialog");
+            var specifyDialogBox = new Window("dialog", undefined, undefined, { closeButton: false });
             specifyDialogBox.text = "Specify";
             specifyDialogBox.orientation = "row";
             specifyDialogBox.alignChildren = ["left", "top"];
@@ -486,7 +486,17 @@ function specifyObjects() {
             var resultColor = [(parseInt(defaultColorRed) / 255), (parseInt(defaultColorGreen) / 255), (parseInt(defaultColorBlue) / 255)];
             colorPickerButton.onClick = function () {
                 try {
-                    resultColor = colorPicker([color.red, color.green, color.blue], { name: 'Specify: Choose label color', version: '' });
+                    // Check if colorPicker was imported, if not, use built-in
+                    if (typeof colorPicker === 'function') {
+                        resultColor = colorPicker([color.red, color.green, color.blue], { name: 'Specify: Choose label color', version: '' });
+                    } else {
+                        // Built-in colorPicker
+                        var pickedColor = $.colorPicker("0x" + rgbToHex(color.red, color.green, color.blue)); // 0xRRGGBB
+                        resultColor[0] = (hexadecimalRgbToRgb(pickedColor).r / 255);
+                        resultColor[1] = (hexadecimalRgbToRgb(pickedColor).g / 255);
+                        resultColor[2] = (hexadecimalRgbToRgb(pickedColor).b / 255);
+                    }
+                    // Store colors
                     // Color has been picked
                     color.red = parseInt(Math.round(resultColor[0] * 255));
                     color.green = parseInt(Math.round(resultColor[1] * 255));
@@ -494,8 +504,9 @@ function specifyObjects() {
                     $.setenv("Specify_defaultColorRed", color.red);
                     $.setenv("Specify_defaultColorGreen", color.green);
                     $.setenv("Specify_defaultColorBlue", color.blue);
+
                     // Update colorPickerButton
-                    colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, resultColor);
+                    colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, [(parseInt(color.red) / 255), (parseInt(color.green) / 255), (parseInt(color.blue) / 255)], 1);
                     colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, getColorPickerButtonTextColor(color.red, color.green, color.blue), 1);
                     colorPickerButton.onDraw = customDraw;
                     updatePanel(specifyDialogBox);
@@ -1344,6 +1355,12 @@ function specifyObjects() {
                 strokeWidthInput.text = setStrokeWidth;
                 headTailSizeInput.text = setHeadTailSize;
 
+                // Reset colorPickerButton
+                colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, [(parseInt(setRed) / 255), (parseInt(setGreen) / 255), (parseInt(setBlue) / 255)], 1);
+                colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, getColorPickerButtonTextColor(color.red, color.green, color.blue), 1);
+                colorPickerButton.onDraw = customDraw;
+                updatePanel(specifyDialogBox);
+
                 // Unset environmental variables
                 $.setenv("Specify_defaultUnits", "");
                 $.setenv("Specify_defaultFontSize", "");
@@ -1358,12 +1375,6 @@ function specifyObjects() {
                 $.setenv("Specify_defaultUseCustomUnits", "");
                 $.setenv("Specify_defaultCustomUnits", "");
 
-                // Reset colorPickerButton
-                colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, [(parseInt(setRed) / 255), (parseInt(setGreen) / 255), (parseInt(setBlue) / 255)], 1);
-                colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, getColorPickerButtonTextColor(color.red, color.green, color.blue), 1);
-                colorPickerButton.onDraw = customDraw;
-                updatePanel(specifyDialogBox);
-
                 beep();
                 alert('The default options and styles have been restored.');
 
@@ -1373,6 +1384,33 @@ function specifyObjects() {
 
             function updatePanel(win) {
                 specifyDialogBox.layout.layout(true);
+            };
+
+            function rgbToHex(r, g, b) {
+                return ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+            };
+
+            function hexadecimalRgbToRgb(hexadecimalRgb) {
+                return {
+                    r: (hexadecimalRgb >> 16) & 0xFF,
+                    g: (hexadecimalRgb >> 8) & 0xFF,
+                    b: hexadecimalRgb & 0xFF,
+                };
+            };
+
+            function hexToRgb(hex) {
+                // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+                var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+                hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+                    return r + r + g + g + b + b;
+                });
+
+                var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? {
+                    r: parseInt(result[1], 16),
+                    g: parseInt(result[2], 16),
+                    b: parseInt(result[3], 16)
+                } : null;
             };
 
             function getColorPickerButtonTextColor(red, green, blue) {
@@ -1409,7 +1447,7 @@ function specifyObjects() {
                         eventObj.dispatch();
                     }
                 } catch (e) {
-                    $.writeln("Error => toggleSpecifyDialog: " + e)
+                    $.writeln("Specify Error => toggleSpecifyDialog: " + e)
                 } finally {
                     if (action === 'open') {
                         specifyDialogBox.show();
@@ -1436,4 +1474,5 @@ function specifyObjects() {
     }
 }
 
+// Run script
 specifyObjects();
