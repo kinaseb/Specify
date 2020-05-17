@@ -885,19 +885,19 @@ function specifyObjects() {
                     headTailSizeInput.active = true;
                     headTailSizeInput.text = setHeadTailSize;
                 } else if (selectedItems == 2 && betweenCheckbox.value) {
-                    if (top) specDouble(objectsToSpec[0], objectsToSpec[1], "Top");
-                    if (left) specDouble(objectsToSpec[0], objectsToSpec[1], "Left");
-                    if (right) specDouble(objectsToSpec[0], objectsToSpec[1], "Right");
-                    if (bottom) specDouble(objectsToSpec[0], objectsToSpec[1], "Bottom");
+                    if (top) specDouble(objectsToSpec[0], objectsToSpec[1], "top");
+                    if (left) specDouble(objectsToSpec[0], objectsToSpec[1], "left");
+                    if (right) specDouble(objectsToSpec[0], objectsToSpec[1], "right");
+                    if (bottom) specDouble(objectsToSpec[0], objectsToSpec[1], "bottom");
                     // Close dialog when finished
                     toggleSpecifyDialog('close');
                 } else {
                     // Iterate over each selected object, creating individual dimensions as you go
                     for (var objIndex = objectsToSpec.length - 1; objIndex >= 0; objIndex--) {
-                        if (top) specSingle(objectsToSpec[objIndex].geometricBounds, "Top");
-                        if (left) specSingle(objectsToSpec[objIndex].geometricBounds, "Left");
-                        if (right) specSingle(objectsToSpec[objIndex].geometricBounds, "Right");
-                        if (bottom) specSingle(objectsToSpec[objIndex].geometricBounds, "Bottom");
+                        if (top) specSingle(objectsToSpec[objIndex].geometricBounds, "top");
+                        if (left) specSingle(objectsToSpec[objIndex].geometricBounds, "left");
+                        if (right) specSingle(objectsToSpec[objIndex].geometricBounds, "right");
+                        if (bottom) specSingle(objectsToSpec[objIndex].geometricBounds, "bottom");
                     }
                     // Close dialog when finished
                     toggleSpecifyDialog('close');
@@ -928,28 +928,28 @@ function specifyObjects() {
                 var dir = 1;
 
                 switch (where) {
-                    case "Top":
+                    case "top":
                         a = bound[0];
                         b = bound[2];
                         c = bound[1];
                         xy = "x";
                         dir = 1;
                         break;
-                    case "Right":
+                    case "right":
                         a = bound[1];
                         b = bound[3];
                         c = bound[2];
                         xy = "y";
                         dir = 1;
                         break;
-                    case "Bottom":
+                    case "bottom":
                         a = bound[0];
                         b = bound[2];
                         c = bound[3];
                         xy = "x";
                         dir = -1;
                         break;
-                    case "Left":
+                    case "left":
                         a = bound[1];
                         b = bound[3];
                         c = bound[0];
@@ -975,7 +975,7 @@ function specifyObjects() {
                     lines[2].push(new Array(b, c + (gap + headTailSize / 2) * dir));
 
                     // Create text label
-                    if (where == "Top") {
+                    if (where == "top") {
                         var t = specLabel(w, (a + b) / 2, lines[0][1][1], color);
                         t.top += t.height;
                     } else {
@@ -998,7 +998,7 @@ function specifyObjects() {
                     lines[2].push(new Array(c + (gap + headTailSize / 2) * dir, b));
 
                     // Create text label
-                    if (where == "Left") {
+                    if (where == "left") {
                         var t = specLabel(h, lines[0][1][0], (a + b) / 2, color);
                         t.left -= t.width;
                         t.rotate(90, true, false, false, false, Transformation.BOTTOMRIGHT);
@@ -1040,7 +1040,7 @@ function specifyObjects() {
                 var a = item1.geometricBounds;
                 var b = item2.geometricBounds;
 
-                if (where == "Top" || where == "Bottom") {
+                if (where == "top" || where == "bottom") {
 
                     if (b[0] > a[0]) { // item 2 on right,
 
