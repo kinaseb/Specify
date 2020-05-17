@@ -2,22 +2,45 @@ function onLoaded() {
     /* Create an instance of CSInterface. */
     var csInterface = new CSInterface();
 
-    var specifyButton = document.getElementById('specify-button');
-    if (specifyButton) {
-        specifyButton.addEventListener('click', runSpecifyScript);
-    }
+    // Set the initial panel colors
+    updateThemeWithAppSkinInfo(csInterface.hostEnvironment.appSkinInfo);
+
+    // Bind event for extension panel window visiblilty change
+    csInterface.addEventListener("com.adobe.csxs.events.WindowVisibilityChanged", function (e) {
+        // Update the color of the panel when the theme color of the product changed.
+        onAppThemeColorChanged();
+    });
 
     function runSpecifyScript() {
         csInterface.evalScript("specifyObjects()");
     }
 
-    //  -------------------------------------- //
+    var specifyButton = document.getElementById('specify-button');
+    if (specifyButton) {
+        // Run script on click if button is not disabled
+        specifyButton.addEventListener('click', function (e) {
+            if (specifyButton.disabled == true) {
+                alert('disabled');
+                return
+            }
+            runSpecifyScript();
+        });
+    }
 
-    updateThemeWithAppSkinInfo(csInterface.hostEnvironment.appSkinInfo);
-    // Update the color of the panel when the theme color of the product changed.
-    csInterface.addEventListener(csInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
+    // Respond to custom event of dialog toggled open or close
+    csInterface.addEventListener("com.adamdehaven.specify.dialogToggled", function (e) {
+        // Enable/disable extension panel button
+        if (specifyButton) {
+            if (e.data === 'open') {
+                specifyButton.disabled = true;
+            } else if (e.data === 'close') {
+                specifyButton.disabled = false;
+            }
+        }
+
+    });
+
 }
-
 /**
  * Update the theme with the AppSkinInfo retrieved from the host product.
  */
@@ -27,46 +50,51 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     var panelBackgroundColor = appSkinInfo.panelBackgroundColor.color;
     document.body.bgColor = toHex(panelBackgroundColor);
 
-    var styleId = "ppstyle";
+    var styleId = "specify-extension-styles";
 
     var csInterface = new CSInterface();
-    var appName = csInterface.hostEnvironment.appName;
-
 
     var isPanelThemeLight = panelBackgroundColor.red > 127;
-    var fontColor, disabledFontColor;
-    var borderColor;
-    var backgroundColor;
+    var buttonColor;
+    var buttonBorderColor;
+    var buttonBackgroundColor;
+
     if (isPanelThemeLight) {
-        fontColor = "#000000;";
-        disabledFontColor = "color:" + toHex(panelBackgroundColor, -70) + ";";
-        borderColor = "border-color: " + toHex(panelBackgroundColor, -90) + ";";
-        backgroundColor = toHex(panelBackgroundColor, 54) + ";";
+        buttonColor = "#000000 !important;";
+        buttonBorderColor = toHex(panelBackgroundColor, -90) + " !important;";
+        buttonBackgroundColor = toHex(panelBackgroundColor, 54) + " !important;";
     } else {
-        fontColor = "#ffffff;";
-        disabledFontColor = "color:" + toHex(panelBackgroundColor, 100) + ";";
-        borderColor = "border-color: " + toHex(panelBackgroundColor, -45) + ";";
-        backgroundColor = toHex(panelBackgroundColor, -20) + ";";
+        buttonColor = "#ffffff !important;";
+        buttonBorderColor = toHex(panelBackgroundColor, -45) + " !important;";
+        buttonBackgroundColor = toHex(panelBackgroundColor, -20) + " !important;";
     }
 
-    // For AI, ID and FL use old implementation
-    addRule(styleId, ".default", "font-size:" + appSkinInfo.baseFontSize + "px" + "; color:" + reverseColor(panelBackgroundColor) + "; background-color:" + toHex(panelBackgroundColor, 20));
-    addRule(styleId, "button, .button", "border-color: " + toHex(panelBgColor, -50));
-    // Potential styles
-    addRule(styleId, "button, .button", borderColor);
-    addRule(styleId, "button, .button", backgroundColor);
+    addRule(styleId, ".specify-extension-panel, .default", "font-size:" + appSkinInfo.baseFontSize + "px" + "; color:" + reverseColor(panelBackgroundColor) + "; background-color:" + toHex(panelBackgroundColor, 1));
+
+    addRule(styleId, "#specify-button", "border-color: " + buttonBorderColor);
+    addRule(styleId, "#specify-button", "background-color: " + buttonBackgroundColor);
+    addRule(styleId, "#specify-button", "color: " + buttonColor);
+
 }
 
 function addRule(stylesheetId, selector, rule) {
     var stylesheet = document.getElementById(stylesheetId);
 
-    if (stylesheet) {
+    if (!stylesheet) {
+        stylesheet = document.createElement('style');
+        stylesheet.id = stylesheetId;
+        document.head.appendChild(stylesheet)
+    }
+
+    try {
         stylesheet = stylesheet.sheet;
         if (stylesheet.addRule) {
             stylesheet.addRule(selector, rule);
         } else if (stylesheet.insertRule) {
             stylesheet.insertRule(selector + ' { ' + rule + ' }', stylesheet.cssRules.length);
         }
+    } catch (e) {
+
     }
 }
 

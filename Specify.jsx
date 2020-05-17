@@ -12,8 +12,7 @@
  */
 
 // Import colorPicker
-var colorPickerPath = Folder($.fileName).parent.fsName;
-$.evalFile(new File(colorPickerPath + "/vendor/colorPicker.js"));
+//@include "./vendor/colorPicker.js"
 
 //
 // Show dialog
@@ -26,6 +25,9 @@ function specifyObjects() {
             var doc = activeDocument;
             // Count selected items
             var selectedItems = parseInt(doc.selection.length, 10) || 0;
+
+            // Extension lib event object
+            var xLib;
 
             //
             // Defaults
@@ -483,20 +485,24 @@ function specifyObjects() {
 
             var resultColor = [(parseInt(defaultColorRed) / 255), (parseInt(defaultColorGreen) / 255), (parseInt(defaultColorBlue) / 255)];
             colorPickerButton.onClick = function () {
-                resultColor = colorPicker([color.red, color.green, color.blue], { name: 'Specify: Choose label color', version: '' });
-                // Color has been picked
-                color.red = parseInt(Math.round(resultColor[0] * 255));
-                color.green = parseInt(Math.round(resultColor[1] * 255));
-                color.blue = parseInt(Math.round(resultColor[2] * 255));
-                $.setenv("Specify_defaultColorRed", color.red);
-                $.setenv("Specify_defaultColorGreen", color.green);
-                $.setenv("Specify_defaultColorBlue", color.blue);
-                // Update colorPickerButton
-                colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, resultColor);
-                colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, getColorPickerButtonTextColor(color.red, color.green, color.blue), 1);
-                colorPickerButton.onDraw = customDraw;
-                updatePanel(specifyDialogBox);
-                restoreDefaultsButton.enabled = true;
+                try {
+                    resultColor = colorPicker([color.red, color.green, color.blue], { name: 'Specify: Choose label color', version: '' });
+                    // Color has been picked
+                    color.red = parseInt(Math.round(resultColor[0] * 255));
+                    color.green = parseInt(Math.round(resultColor[1] * 255));
+                    color.blue = parseInt(Math.round(resultColor[2] * 255));
+                    $.setenv("Specify_defaultColorRed", color.red);
+                    $.setenv("Specify_defaultColorGreen", color.green);
+                    $.setenv("Specify_defaultColorBlue", color.blue);
+                    // Update colorPickerButton
+                    colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, resultColor);
+                    colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, getColorPickerButtonTextColor(color.red, color.green, color.blue), 1);
+                    colorPickerButton.onDraw = customDraw;
+                    updatePanel(specifyDialogBox);
+                    restoreDefaultsButton.enabled = true;
+                } catch (e) {
+
+                }
             }
 
             /**
@@ -719,7 +725,7 @@ function specifyObjects() {
             cancelButton.text = "Cancel";
             cancelButton.alignment = ["right", "bottom"];
             cancelButton.onClick = function () {
-                specifyDialogBox.close();
+                toggleSpecifyDialog('close');
             };
 
             var specifyButton = buttonGroup.add("button", undefined, undefined, { name: "specifyButton" });
@@ -825,7 +831,7 @@ function specifyObjects() {
                     beep();
                     alert("Please select at least 1 object and try again.");
                     // Close dialog
-                    specifyDialogBox.close();
+                    toggleSpecifyDialog('close');
                 } else if (!top && !left && !right && !bottom) {
                     horizontalTabbedPanel.selection = tabOptions; // Activate Options tab
                     beep();
@@ -884,7 +890,7 @@ function specifyObjects() {
                     if (right) specDouble(objectsToSpec[0], objectsToSpec[1], "Right");
                     if (bottom) specDouble(objectsToSpec[0], objectsToSpec[1], "Bottom");
                     // Close dialog when finished
-                    specifyDialogBox.close();
+                    toggleSpecifyDialog('close');
                 } else {
                     // Iterate over each selected object, creating individual dimensions as you go
                     for (var objIndex = objectsToSpec.length - 1; objIndex >= 0; objIndex--) {
@@ -894,7 +900,7 @@ function specifyObjects() {
                         if (bottom) specSingle(objectsToSpec[objIndex].geometricBounds, "Bottom");
                     }
                     // Close dialog when finished
-                    specifyDialogBox.close();
+                    toggleSpecifyDialog('close');
                 }
             };
 
@@ -1388,13 +1394,38 @@ function specifyObjects() {
                 }
             };
 
+            function toggleSpecifyDialog(action) {
+                if (!action || (action !== 'open' && action !== 'close')) {
+                    return
+                }
+
+                // Dispatch event, then show dialog
+                try {
+                    xLib = new ExternalObject("lib:PlugPlugExternalObject");
+                    if (xLib) {
+                        var eventObj = new CSXSEvent();
+                        eventObj.type = "com.adamdehaven.specify.dialogToggled";
+                        eventObj.data = action;
+                        eventObj.dispatch();
+                    }
+                } catch (e) {
+                    $.writeln("Error => toggleSpecifyDialog: " + e)
+                } finally {
+                    if (action === 'open') {
+                        specifyDialogBox.show();
+                    } else {
+                        specifyDialogBox.close();
+                    }
+                }
+            };
+
             switch (selectedItems) {
                 case 0:
                     beep();
                     alert("Please select at least 1 object and try again.");
                     break;
                 default:
-                    specifyDialogBox.show();
+                    toggleSpecifyDialog('open');
                     break;
             }
         } else { // No active document
