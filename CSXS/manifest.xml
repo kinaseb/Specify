@@ -42,12 +42,12 @@
                             <Width>200</Width>
                         </MinSize>
                     </Geometry>
-                    <!-- <Icons>
-                        <Icon Type="Normal">./TeEx_HTML_TEST_23x23_N.png</Icon>
-                        <Icon Type="RollOver">./TeEx_HTML_TEST_23x23_R.png</Icon>
-                        <Icon Type="DarkNormal">./TeEx_HTML_TEST_23x23_DN.png</Icon>
-                        <Icon Type="DarkRollOver">./TeEx_HTML_TEST_23x23_DR.png</Icon>
-                    </Icons> -->
+                    <Icons>
+                        <Icon Type="Normal">./icon-light-535353.png</Icon>
+                        <Icon Type="RollOver">./icon-light-rollover-3A3A3A.png</Icon>
+                        <Icon Type="DarkNormal">./icon-dark-C2C2C2.png</Icon>
+                        <Icon Type="DarkRollOver">./icon-dark-rollover-A9A9A9.png</Icon>
+                    </Icons>
                 </UI>
             </DispatchInfo>
         </Extension>
