@@ -1,5 +1,5 @@
 function onLoaded() {
-    /* Create an instance of CSInterface. */
+    // Create an instance of CSInterface
     var csInterface = new CSInterface();
 
     // Set the initial panel colors
@@ -7,24 +7,28 @@ function onLoaded() {
 
     // Bind event for extension panel window visiblilty change
     csInterface.addEventListener("com.adobe.csxs.events.WindowVisibilityChanged", function (e) {
+        var specifyButton = document.getElementById('specify-button');
+        if (specifyButton) {
+            // Re-enable specifyButton
+            specifyButton.disabled = false;
+        }
         // Update the color of the panel when the theme color of the product changed.
         onAppThemeColorChanged();
     });
 
-    function runSpecifyScript() {
+    function runSpecifyScript(e) {
+        e.preventDefault();
+        if (specifyButton.disabled == true) {
+            return
+        }
+
         csInterface.evalScript("specifyObjects()");
     }
 
     var specifyButton = document.getElementById('specify-button');
     if (specifyButton) {
         // Run script on click if button is not disabled
-        specifyButton.addEventListener('click', function (e) {
-            if (specifyButton.disabled == true) {
-                alert('disabled');
-                return
-            }
-            runSpecifyScript();
-        });
+        specifyButton.addEventListener("click", runSpecifyScript);
     }
 
     // Respond to custom event of dialog toggled open or close
