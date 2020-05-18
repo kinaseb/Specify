@@ -11,13 +11,26 @@
  * ====================
  */
 
+// Name script
+#script "Specify"
+#includepath "./vendor"
 // Import colorPicker
-//@include "./vendor/colorPicker.js"
+#include "./vendor/colorPicker.js"
+
+// Set variable to skip first run if running from extension (automatically closes specifyObject(false) called at bottom of JSX script)
+var skipFirstAutoRun = true;
 
 //
 // Show dialog
 // ===========================
-function specifyObjects() {
+function specifyObjects(inExtension) {
+    if (inExtension === true && skipFirstAutoRun === true) {
+        // $.writeln("line" + $.line + "dialogIsOpen: " + dialogIsOpen);
+        skipFirstAutoRun = false;
+        toggleSpecifyDialog('close');
+        return
+    }
+
     try {
         if (app.documents.length > 0) {
 
@@ -1470,9 +1483,11 @@ function specifyObjects() {
             alert("There are no objects to Specify. \nPlease open a document to continue.")
         }
     } catch (e) {
-        alert("Error: " + e)
+        // Close dialog in case it's open
+        toggleSpecifyDialog('close');
+        $.writeln("Error: " + e)
     }
 }
 
-// Run script
-specifyObjects();
+// Run script, pass false for not running in extension
+specifyObjects(false);

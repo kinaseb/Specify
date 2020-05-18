@@ -22,7 +22,7 @@ function onLoaded() {
             return
         }
 
-        csInterface.evalScript("specifyObjects()");
+        csInterface.evalScript("specifyObjects(true)");
     }
 
     var specifyButton = document.getElementById('specify-button');
