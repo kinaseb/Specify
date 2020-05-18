@@ -491,7 +491,7 @@ function specifyObjects(inExtension) {
             var colorPickerButton = labelColorGroup.add('iconbutton', undefined, undefined, { name: 'colorPickerButton', style: 'toolbutton' });
             colorPickerButton.size = [135, 20];
             colorPickerButton.fillBrush = colorPickerButton.graphics.newBrush(colorPickerButton.graphics.BrushType.SOLID_COLOR, [(parseInt(defaultColorRed) / 255), (parseInt(defaultColorGreen) / 255), (parseInt(defaultColorBlue) / 255)], 1);
-            colorPickerButton.text = "Click to choose color";
+            colorPickerButton.text = "Select new color";
             colorPickerButton.textPen = colorPickerButton.graphics.newPen(colorPickerButton.graphics.PenType.SOLID_COLOR, getColorPickerButtonTextColor(color.red, color.green, color.blue), 1);
             colorPickerButton.onDraw = customDraw;
             colorPickerButton.helpTip = "Select the color for the dimension label(s).";
