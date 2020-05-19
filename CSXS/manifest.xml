@@ -18,7 +18,7 @@
         <Extension Id="com.adamdehaven.specify.extension">
             <DispatchInfo>
                 <Resources>
-                    <MainPath>./index.html</MainPath>
+                    <MainPath>./extension/index.html</MainPath>
                     <ScriptPath>./Specify.jsx</ScriptPath>
                     <CEFCommandLine/>
                 </Resources>
@@ -43,10 +43,10 @@
                         </MinSize>
                     </Geometry>
                     <Icons>
-                        <Icon Type="Normal">./icon-light-535353.png</Icon>
-                        <Icon Type="RollOver">./icon-light-rollover-3A3A3A.png</Icon>
-                        <Icon Type="DarkNormal">./icon-dark-C2C2C2.png</Icon>
-                        <Icon Type="DarkRollOver">./icon-dark-rollover-A9A9A9.png</Icon>
+                        <Icon Type="Normal">./extension/img/icon-light-535353.png</Icon>
+                        <Icon Type="RollOver">./extension/img/icon-light-rollover-3A3A3A.png</Icon>
+                        <Icon Type="DarkNormal">./extension/img/icon-dark-C2C2C2.png</Icon>
+                        <Icon Type="DarkRollOver">./extension/img/icon-dark-rollover-A9A9A9.png</Icon>
                     </Icons>
                 </UI>
             </DispatchInfo>

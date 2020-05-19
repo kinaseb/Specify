@@ -15,7 +15,7 @@
 #script "Specify"
 #includepath "./vendor"
 // Import colorPicker
-#include "./vendor/colorPicker.js"
+#include "./extension/vendor/colorPicker.js"
 
 // Set variable to skip first run if running from extension (automatically closes specifyObject(false) called at bottom of JSX script)
 var skipFirstAutoRun = true;
