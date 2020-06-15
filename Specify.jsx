@@ -10,12 +10,13 @@
  *
  * ====================
  */
-
 // Name script
 #script "Specify"
 #includepath "./extension/lib"
 // Import colorPicker
 #include "./extension/lib/colorPicker.js"
+
+var specifyVersion = '2.0.0';
 
 // Set variable to skip first run if running from extension (automatically closes specifyObject(false) called at bottom of JSX script)
 var skipFirstAutoRun = true;
@@ -663,10 +664,13 @@ function specifyObjects(inExtension) {
             urlButton.alignment = ["center", "center"];
             urlButton.onClick = function () {
                 openURL("https://github.com/adamdehaven/Specify");
-
                 urlButton.active = true;
                 urlButton.active = false;
             };
+
+            var versionText = updatesGroup.add("statictext", undefined, undefined, { name: "versionText" });
+            versionText.text = specifyVersion;
+            versionText.alignment = ["center", "center"];
 
             // TABUPDATES
             // ==========
