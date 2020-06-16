@@ -6,6 +6,12 @@ Adobe Illustrator script and extension to automate specifying dimension measurem
 
 ## Installation
 
+### Extension Install
+
+Simply [download the Specify extension from Adobe Exchange](https://exchange.adobe.com/creativecloud).
+
+### Script Install
+
 The instructions below only pertain to the script-only (non-extension) version of Specify.
 
 1. [Download a copy of the latest release](https://github.com/adamdehaven/Specify/archive/master.zip).
@@ -24,6 +30,12 @@ Alternatively, you may save the folder and all of its contents at the location o
 Regardless of where you save the files, you **must** save the entire `Specify` folder and all of its contents at the same location, without manipulating the structure of the folder.
 
 ## Usage
+
+### Extension Usage
+
+After installing the Specify extension from Adobe Exchange, simply navigate to Window => Extensions => Specify to get started.
+
+### Script Usage
 
 To run the script, first select one or more objects in your open Illustrator document. You must have at least one object selected via Illustrator's Selection Tool <kbd>V</kbd> or Direct Selection Tool <kbd>A</kbd>.
 
@@ -127,4 +139,4 @@ Not into looking at code? No worries. Reach out on Twitter [@adamdehaven](https:
 
 ![specify-example](img/specify-example.jpg)
 
-![specify-workplace-example](img/specify-workplace-example.jpg)
+![specify-workplace-example](img/specify-workplace-example.png)

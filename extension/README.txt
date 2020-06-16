@@ -3,7 +3,7 @@ SPECIFY: A DIMENSIONING EXTENSION FOR ADOBE ILLUSTRATOR
 ------------------------------------------------------------
 Adobe Illustrator extension and extension to automate specifying dimension measurements (and adding dimension lines) of single or multiple objects, and specifying the dimensions between two objects.
 
-For the non-extension script version, updates, and more information, check out the <a href="https://github.com/adamdehaven/Specify" target="_blank">repository on GitHub</a>.
+For the non-extension script version, updates, and more information, check out the repository on GitHub (https://github.com/adamdehaven/Specify).
  
 USAGE
 ------------------------------------------------------------
@@ -111,6 +111,6 @@ At the bottom left of the Specify dialog is a Reset button that restores all def
  
 SUPPORT
 ------------------------------------------------------------
-Do you have questions? Would you like to contribute? Something else? Feel free to open an issue <a href="https://github.com/adamdehaven/Specify/issues" target="_blank">on GitHub</a>.
+Do you have questions? Would you like to contribute? Something else? Feel free to open an issue on GitHub.
 
-Not into looking at code? No worries. Reach out on Twitter <a href="https://twitter.com/adamdehaven" target="_blank">@adamdehaven</a>.
+Not into looking at code? No worries. Reach out on Twitter @adamdehaven
