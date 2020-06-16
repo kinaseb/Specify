@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.adobe.CEPHTMLTEST" ExtensionBundleVersion="2.0.0" Version="6.0">
+<ExtensionManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ExtensionBundleId="com.adamdehaven.Specify" ExtensionBundleVersion="2.0.0" Version="7.0">
     <ExtensionList>
-        <Extension Id="com.adamdehaven.specify.extension" Version="2.0.0"/>
+        <Extension Id="com.adamdehaven.Specify.Extension" Version="2.0.0"/>
     </ExtensionList>
     <ExecutionEnvironment>
         <HostList>
@@ -15,12 +15,11 @@
         </RequiredRuntimeList>
     </ExecutionEnvironment>
     <DispatchInfoList>
-        <Extension Id="com.adamdehaven.specify.extension">
+        <Extension Id="com.adamdehaven.Specify.Extension">
             <DispatchInfo>
                 <Resources>
                     <MainPath>./extension/index.html</MainPath>
                     <ScriptPath>./Specify.jsx</ScriptPath>
-                    <CEFCommandLine/>
                 </Resources>
                 <Lifecycle>
                     <AutoVisible>true</AutoVisible>

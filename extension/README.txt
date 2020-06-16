@@ -9,7 +9,7 @@ USAGE
 ------------------------------------------------------------
 To run the extension, first select one or more objects in your open Illustrator document. You must have at least one object selected via Illustrator's Selection Tool (V) or Direct Selection Tool (A).
 
-After installing the Specify extension, simply navigate to Window => Extensions => Specify to get started.
+After installing the Specify extension, simply navigate to Window > Extensions > Specify to get started.
 
  
 Options And Styles
