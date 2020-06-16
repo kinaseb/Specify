@@ -57,9 +57,9 @@ If you make a mistake, no problem! Simply select the desired objects and run the
 
 ## Options Panel
 
-![Specify Illustrator Script Options Panel](img/specify-options-panel.png)
-
 The Options Panel allows the user to select the side(s) of the object(s) to dimension, whether to dimension the object itself or between objects, and the scale of the artwork.
+
+![Specify Illustrator Script Options Panel](img/specify-options-panel.png)
 
 ### Dimensions
 
@@ -77,9 +77,9 @@ For example, if you are designing an engineering drawing at 1/4 scale (or 1:4), 
 
 ## Styles Panel
 
-![Specify Illustrator Script Styles Panel](img/specify-styles-panel.png)
-
 The Styles Panel allows the user to completely customize the label styles and the line styles for all dimensions.
+
+![Specify Illustrator Script Styles Panel](img/specify-styles-panel.png)
 
 ### Include Units in Label
 
@@ -119,9 +119,9 @@ Set the desired length of the line at both ends of the dimension line.
 
 ## Updates Panel
 
-![Specify Illustrator Script Updates Panel](img/specify-updates-panel.png)
-
 The Updates Panel provides the current script version information, along with references to the GitHub code repository, and author information.
+
+![Specify Illustrator Script Updates Panel](img/specify-updates-panel.png)
 
 Be sure to star and subscribe [on GitHub](https://github.com/adamdehaven/specify) in order to stay up-to-date on future releases.
 
