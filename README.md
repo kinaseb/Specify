@@ -7,7 +7,7 @@ Adobe Illustrator script to specify the dimensions of single or multiple objects
 ## Installation
 
 1. [Download a copy of the latest release](https://github.com/adamdehaven/Specify/archive/master.zip).
-2. Extract the contents of the `.zip` file to one of the file paths shown below (depending on your OS) in order to allow running the script from Illustrator's `File > Scripts` menu. You will need to save the entire `Specify` folder and all of its contents at this location.
+2. Extract the contents of the `.zip` file to one of the recommended file paths shown below (depending on your OS) in order to allow running the script from Illustrator's `File > Scripts` menu.
 
     ``` sh
     # Windows
@@ -16,6 +16,10 @@ Adobe Illustrator script to specify the dimensions of single or multiple objects
     # OSX
     Applications > Adobe Illustrator [VERSION] > Presets > en_US > Scripts
     ```
+
+Alternatively, you may save the folder and all of its contents at the location of your choosing.
+
+Regardless of where you save the files, you **must** save the entire `Specify` folder and all of its contents at the same location, without manipulating the structure of the folder.
 
 ## Usage
 
