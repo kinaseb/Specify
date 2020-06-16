@@ -31,7 +31,6 @@ Regardless of where you save the files, you **must** save the entire `Specify` f
 
 ## Usage
 
-
 To run the extension or the script, first select one or more objects in your open Illustrator document. You must have at least one object selected via Illustrator's Selection Tool <kbd>V</kbd> or Direct Selection Tool <kbd>A</kbd>.
 
 ### Extension Usage
