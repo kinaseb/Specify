@@ -29,11 +29,17 @@ Assuming you saved the script as [described above](#installation), in Illustrato
 
 If you chose an alternate location to save the Specify folder, you can run by going to `File > Scripts > Other Script...`, and then selecting the `Specify.jsx` file.
 
+### Options and Styles
+
 When the script initializes, you will be presented with a dialog that allows you to choose which dimension(s) of your object(s) you would like to specify. The dialog also allows for the customization of several options. Any changes to the settings defined in the Specify Dialog (including both the [Options Panel](#options-panel) and the [Styles Panel](#styles-panel)) will persist until you close the Adobe Illustrator application, even if you run the script in multiple documents.
 
 After configuring your desired settings, make sure to select which dimension(s) to dimension, and then simply click the "Specify Object(s)" button at the bottom right of the dialog. Specify will quickly output all selected dimensions onto a new **SPEC** layer, and then lock the layer to prevent accidental edits.
 
-You are free to unlock the **SPEC** layer and edit as needed. You may change the color of individual dimension labels, adjust the placement of dimension groups, or even remove dimensions you no longer need. If you make a mistake, no problem! Simply select the desired objects and run the script again.
+### SPEC Layer
+
+You are free to unlock the **SPEC** layer and edit as needed. You may change the color of individual dimension labels, adjust the placement of dimension groups, or even remove dimensions you no longer need.
+
+If you make a mistake, no problem! Simply select the desired objects and run the script again.
 
 ## Options Panel
 
