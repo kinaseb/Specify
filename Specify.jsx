@@ -1,7 +1,6 @@
 ﻿/**
  * Specify
  * =================================
- * Version: 2.0.0
  * https://github.com/adamdehaven/Specify
  *
  * Adam DeHaven

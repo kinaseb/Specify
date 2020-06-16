@@ -1,6 +1,6 @@
 # Specify: A dimensioning script for Adobe Illustrator
 
-Adobe Illustrator script to specify the dimensions of single or multiple objects, or to specify the dimensions between two objects.
+Adobe Illustrator script and extension to specify the dimensions of single or multiple objects, or to specify the dimensions between two objects.
 
 ![specify-example](img/specify-example.jpg)
 
