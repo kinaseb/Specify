@@ -6,6 +6,8 @@ Adobe Illustrator script and extension to automate specifying dimension measurem
 
 ## Installation
 
+The instructions below only pertain to the script-only (non-extension) version of Specify.
+
 1. [Download a copy of the latest release](https://github.com/adamdehaven/Specify/archive/master.zip).
 2. Extract the contents of the `.zip` file to one of the recommended file paths shown below (depending on your OS) in order to allow running the script from Illustrator's `File > Scripts` menu.
 
