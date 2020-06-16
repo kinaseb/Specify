@@ -1,67 +1,113 @@
-# SPECIFY
-Illustrator script to specify the dimensions of single or multiple objects, or to specify the dimensions between two objects.
+# Specify: A dimensioning script for Adobe Illustrator
 
-[![GitHub release](https://img.shields.io/github/release/adamdehaven/Specify.svg?maxAge=3600)](https://github.com/adamdehaven/Specify/archive/master.zip)
-[![GitHub commits](https://img.shields.io/github/commits-since/adamdehaven/Specify/v1.3.1.svg?maxAge=3600)](https://github.com/adamdehaven/Specify/compare/v1.3.1...master)
-[![GitHub issues](https://img.shields.io/github/issues/adamdehaven/Specify.svg?maxAge=3600)](https://github.com/adamdehaven/Specify/issues)
-[![license](https://img.shields.io/github/license/adamdehaven/Specify.svg?maxAge=3600)](https://raw.githubusercontent.com/adamdehaven/Specify/master/LICENSE)
+Adobe Illustrator script to specify the dimensions of single or multiple objects, or to specify the dimensions between two objects.
 
-![specify-example](https://raw.githubusercontent.com/adamdehaven/Specify/master/specify-example.jpg)
+![specify-example](img/specify-example.jpg)
 
-##### Save to Default Scripts
-> To allow the script to show as an option within the default `Scripts` menu, save the script in the following location _(path shown is for Mac. Your actual path may vary)_
-> ```
-> Applications > Adobe Illustrator [YOUR VERSION] > Presets > en_US > Scripts
-> ```
+## Installation
 
-Alternatively, you may save the script in a folder of your choosing.
+First, [download a copy of the latest release](https://github.com/adamdehaven/Specify/archive/master.zip).
 
-## REQUIREMENTS
-1. Must have an open document in Illustrator
-2. Must have at least 1 object selected via Illustrator's Selection Tool (V) or Direct Selection Tool (A)
+Next, extract the contents of the `.zip` file to one of the file paths shown below (depending on your OS) in order to allow running the script from Illustrator's `File > Scripts` menu. You will need to save the entire `Specify` folder and all of its contents at this location.
 
-## HOW TO RUN
-If you saved the script as [described above](#save-to-default-scripts), you should be able to run the script (after selecting object(s) in the document) by navigating within Illustrator to:
-```
-File > Scripts > Specify
-```
-If you chose an alternate location to save the script, you may run by using the following path, and selecting the script file once you navigate to your designated folder:
-```
-File > Scripts > Other Script...
+``` sh
+# Windows
+C:\Program Files\Adobe\Adobe Illustrator [VERSION]\Presets\en_US\Scripts
+
+# OSX
+Applications > Adobe Illustrator [VERSION] > Presets > en_US > Scripts
 ```
 
-#### Specify Dialog
-After choosing to run the script, you will be presented with a dialog that allows you to choose which dimension(s) to specify. The dialog also allows you to edit the default options. **Any changes to the options panel will persist until you close the application (even if you run the script in another document).**
+## Usage
 
-![Specify dialog example](https://raw.githubusercontent.com/adamdehaven/Specify/master/img/specify-dialog.png)
+To run the script, first select one or more objects in your open Illustrator document. You must have at least one object selected via Illustrator's Selection Tool <kbd>V</kbd> or Direct Selection Tool <kbd>A</kbd>.
 
-#### Dimension Single or Multiple Objects
-Select a single object (or group) or multiple objects on your artboard and [run the script](#how-to-run) within Illustrator.
+Assuming you saved the script as [described above](#installation), in Illustrator's menu, go to `File > Scripts > Specify > Specify` ("Specify" appears twice because you have to call the script file inside the Specify directory).
 
-With a single object or multiple objects selected, the script will display a dialog box allowing you to choose which sides to dimension for all objects simultaneously, as well as customizable options. Click 'Specify Object(s)' and the script will output the selected dimensions to the **SPEC** layer (which is automatically created if needed).
+If you chose an alternate location to save the Specify folder, you can run by going to `File > Scripts > Other Script...`, and then selecting the `Specify.jsx` file.
 
-#### Dimension Between Two Objects
-Select two objects and [run the script](#how-to-run) within Illustrator.
+When the script initializes, you will be presented with a dialog that allows you to choose which dimension(s) of your object(s) you would like to specify. The dialog also allows for the customization of several options. Any changes to the settings defined in the Specify Dialog (including both the [Options Panel](#options-panel) and the [Styles Panel](#styles-panel)) will persist until you close the Adobe Illustrator application, even if you run the script in multiple documents.
 
-With two objects selected, the script will display a new option within the dialog box, **Dimension between objects**. When checked, this option will specify the selected dimension(s) between the two chosen objects.
+After configuring your desired settings, make sure to select which dimension(s) to dimension, and then simply click the "Specify Object(s)" button at the bottom right of the dialog. Specify will quickly output all selected dimensions onto a new **SPEC** layer, and then lock the layer to prevent accidental edits.
 
-#### Custom Scale
-Users may define the scale of the artwork/document being designed. For example, if you are designing an engineering drawing at 1/4 scale (or 1:4), you simply choose this ratio from the **Scale** dropdown menu, and then optionally enable a **Custom Units Label** that corresponds to the unit labels to output.
+You are free to unlock the **SPEC** layer and edit as needed. You may change the color of individual dimension labels, adjust the placement of dimension groups, or even remove dimensions you no longer need. If you make a mistake, no problem! Simply select the desired objects and run the script again.
 
-#### Units
-The script automatically dimensions objects based on the Document's default units. To dimension in different units (i.e. Inches, Centimeters, etc.) follow the instructions below:
-> 1. In your document, select show Rulers via `View > Rulers > Show Rulers` ( <kbd>⌘Cmd</kbd> + <kbd>R</kbd> on Mac, <kbd>Ctrl</kbd> + <kbd>R</kbd> on PC )
-> 2. Right click on the Ruler, and select your desired units. Otherwise, the script will use the Document's selected units by default.
-> 3. Run the script and you will now get output as shown in the example below
-![specify-example](https://raw.githubusercontent.com/adamdehaven/Specify/master/img/specify-example.jpg)
+## Options Panel
 
-The units label is optional. A checkbox is included in the Specify dialog box that allows the user to turn the units label on or off.
-##### Examples
-Units Label On:
-> **220.00 px**
+![Specify Illustrator Script Options Panel](img/specify-options-panel.png)
 
-Units Label Off:
-> **220.00**
+The Options Panel allows the user to select the side(s) of the object(s) to dimension, whether to dimension the object itself or between objects, and the scale of the artwork.
 
-#### Example
-![specify-workplace-example](https://raw.githubusercontent.com/adamdehaven/Specify/master/img/specify-workplace-example.jpg)
+### Dimensions
+
+The options panel allows you to first choose which dimension(s) of your Illustrator object you would like to specify. You may choose top, right, bottom, left, or any combination of sides.
+
+### Multiple Objects
+
+If exactly two objects are selected on your artboard, you will be given the option to dimension between the two objects, instead of their individual sides. When checked, this option will specify the selected dimension(s) between the two chosen objects.
+
+### Scale
+
+You may define a custom scale for your artwork, which will apply a multiplier to the displayed units label.
+
+For example, if you are designing an engineering drawing at 1/4 scale (or 1:4), you simply choose this ratio from the **Scale** dropdown menu, and then optionally enable the checkbox for [Custom Units Text](#custom-units-text) on the Styles Panel that corresponds to the unit labels you would like to output. In this example, choosing '1/4' will indicate the artwork is drawn at one-fourth scale, resulting in dimension values that are 4 times their drawn dimensions.
+
+## Styles Panel
+
+![Specify Illustrator Script Styles Panel](img/specify-styles-panel.png)
+
+The Styles Panel allows the user to completely customize the label styles and the line styles for all dimensions.
+
+### Include Units in Label
+
+When checked, inserts the units in the label alongside the dimension measurement.
+
+The script automatically dimensions objects based on the Document's default units. To dimension in different units (i.e. Inches, Centimeters, etc.), first, select show Rulers via `View > Rulers > Show Rulers` ( <kbd>⌘Cmd</kbd> + <kbd>R</kbd> on Mac, <kbd>Ctrl</kbd> + <kbd>R</kbd> on PC ).
+
+Next, right-click on the Ruler, and select your desired units. Otherwise, the script will use the Document's selected units by default.
+
+### Custom Units Text
+
+When checked, allows the user to customize the text of the units label. For example, displaying the abbreviation for feet, "ft" instead of the ruler measurement unit.
+
+### Decimals
+
+Set the desired number of decimal places to display after the decimal point in the label dimensions.
+
+### Font Size
+
+Set the desired font size for the dimension label(s). If the value is less than one (e.g. 0.25) you must include a leading zero before the decimal point.
+
+### Color
+
+Click to select the color for the dimension label(s).
+
+### Gap
+
+Set the size of the desired gap between the dimension label(s) and the object.
+
+### Stroke Width
+
+Set the desired stroke width of the dimension line.
+
+### Head & Tail Length
+
+Set the desired length of the line at both ends of the dimension line.
+
+## Updates Panel
+
+![Specify Illustrator Script Updates Panel](img/specify-updates-panel.png)
+
+The Updates Panel provides the current script version information, along with references to the GitHub code repository, and author information.
+
+Be sure to star and subscribe [on GitHub](https://github.com/adamdehaven/specify) in order to stay up-to-date on future releases.
+
+## Reset
+
+At the bottom left of the Specify dialog is a Reset button that restores all defaults in both the Options Panel and the Styles panel.
+
+## Examples
+
+![specify-example](img/specify-example.jpg)
+
+![specify-workplace-example](img/specify-workplace-example.jpg)

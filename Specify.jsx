@@ -366,7 +366,7 @@ function specifyObjects(inExtension) {
 
             var useCustomUnits = customizeUnitsGroup.add("checkbox", undefined, undefined, { name: "useCustomUnits" });
             useCustomUnits.helpTip = "When checked, allows user to customize\nthe text of the units label.\nExample: ft";
-            useCustomUnits.text = "Customize units text";
+            useCustomUnits.text = "Custom units text";
             useCustomUnits.value = defaultUseCustomUnits;
             if (units.value == false) {
                 useCustomUnits.value = false;
