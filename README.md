@@ -115,6 +115,12 @@ Be sure to star and subscribe [on GitHub](https://github.com/adamdehaven/specify
 
 At the bottom left of the Specify dialog is a Reset button that restores all defaults in both the Options Panel and the Styles panel.
 
+## Support
+
+Do you have questions? Would you like to contribute? Something else? Feel free to [open an issue on GitHub](https://github.com/adamdehaven/Specify/issues).
+
+Not into looking at code? No worries. Reach out on Twitter [@adamdehaven](https://twitter.com/adamdehaven).
+
 ## Examples
 
 ![specify-example](img/specify-example.jpg)
