@@ -31,13 +31,14 @@ Regardless of where you save the files, you **must** save the entire `Specify` f
 
 ## Usage
 
+
+To run the extension or the script, first select one or more objects in your open Illustrator document. You must have at least one object selected via Illustrator's Selection Tool <kbd>V</kbd> or Direct Selection Tool <kbd>A</kbd>.
+
 ### Extension Usage
 
 After installing the Specify extension from Adobe Exchange, simply navigate to Window => Extensions => Specify to get started.
 
 ### Script Usage
-
-To run the script, first select one or more objects in your open Illustrator document. You must have at least one object selected via Illustrator's Selection Tool <kbd>V</kbd> or Direct Selection Tool <kbd>A</kbd>.
 
 Assuming you saved the script as [described above](#installation), in Illustrator's menu, go to `File > Scripts > Specify > Specify` ("Specify" appears twice because you have to call the script file inside the Specify directory).
 
