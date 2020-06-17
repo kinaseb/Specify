@@ -35,7 +35,7 @@ To run the extension or the script, first select one or more objects in your ope
 
 ### Extension Usage
 
-After installing the Specify extension from Adobe Exchange, simply navigate to `Window > Extensions > Specify` to get started. Run the script by simply clicking the "Specify Object(s)" button in the extension panel.
+After [installing the Specify extension from Adobe Exchange](https://exchange.adobe.com/creativecloud.details.104123.specify.html), simply navigate to `Window > Extensions > Specify` to get started. Run the script by simply clicking the "Specify Object(s)" button in the extension panel.
 
 ### Script Usage
 
