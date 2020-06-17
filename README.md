@@ -35,7 +35,7 @@ To run the extension or the script, first select one or more objects in your ope
 
 ### Extension Usage
 
-After installing the Specify extension from Adobe Exchange, simply navigate to Window => Extensions => Specify to get started.
+After installing the Specify extension from Adobe Exchange, simply navigate to `Window > Extensions > Specify` to get started.
 
 ### Script Usage
 

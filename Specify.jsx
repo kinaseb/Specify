@@ -15,7 +15,7 @@
 // Import colorPicker
 #include "./extension/lib/colorPicker.js"
 
-var specifyVersion = '2.0.0';
+var specifyVersion = '2.0.1';
 
 // Set variable to skip first run if running from extension (automatically closes specifyObject(false) called at bottom of JSX script)
 var skipFirstAutoRun = true;
@@ -25,7 +25,6 @@ var skipFirstAutoRun = true;
 // ===========================
 function specifyObjects(inExtension) {
     if (inExtension === true && skipFirstAutoRun === true) {
-        // $.writeln("line" + $.line + "dialogIsOpen: " + dialogIsOpen);
         skipFirstAutoRun = false;
         toggleSpecifyDialog('close');
         return
@@ -41,6 +40,9 @@ function specifyObjects(inExtension) {
 
             // Extension lib event object
             var xLib;
+
+            // Get document scale factor (accounts for "large canvas" documents whereby the scale of units is 1/10 - meaning you need to multiply by 10 for the correct value)
+            var scaleFactor = app.activeDocument.scaleFactor;
 
             //
             // Defaults
@@ -1150,7 +1152,8 @@ function specifyObjects(inExtension) {
                 // Set environmental variable
                 $.setenv("Specify_defaultUnits", displayUnitsLabel);
 
-                var v = val * scale;
+                var v = (val * scaleFactor) * scale;
+
                 var unitsLabel = "";
 
                 switch (doc.rulerUnits) {
