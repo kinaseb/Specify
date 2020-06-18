@@ -15,7 +15,7 @@
 // Import colorPicker
 #include "./extension/lib/colorPicker.js"
 
-var specifyVersion = '2.0.1';
+var specifyVersion = '2.0.2';
 
 // Set variable to skip first run if running from extension (automatically closes specifyObject(false) called at bottom of JSX script)
 var skipFirstAutoRun = true;
@@ -664,7 +664,7 @@ function specifyObjects(inExtension) {
             urlButton.text = "github.com/adamdehaven/Specify";
             urlButton.alignment = ["center", "center"];
             urlButton.onClick = function () {
-                openURL("https://github.com/adamdehaven/Specify");
+                openURLInBrowser("https://github.com/adamdehaven/Specify");
                 urlButton.active = true;
                 urlButton.active = false;
             };
@@ -696,7 +696,7 @@ function specifyObjects(inExtension) {
             authorHomepageButton.text = "adamdehaven.com";
             authorHomepageButton.alignment = ["center", "top"];
             authorHomepageButton.onClick = function () {
-                openURL("https://adamdehaven.com/");
+                openURLInBrowser("https://adamdehaven.com/");
 
                 authorHomepageButton.active = true;
                 authorHomepageButton.active = false;
@@ -1322,34 +1322,6 @@ function specifyObjects(inExtension) {
                 specifyButton.helpTip = (topCheckbox.value || rightCheckbox.value || bottomCheckbox.value || leftCheckbox.value || selectAllCheckbox.value ? "" : "Select at least 1 dimension in the Options tab");
             };
 
-            function openURL(url) {
-                if (!url) {
-                    return
-                }
-
-                try {
-                    if (app.version > 6) {
-                        if (File.fs == "Macintosh") {
-                            var body = 'tell application "Finder"\ropen location "' + url + '"\rend tell';
-                            app.doScript(body, ScriptLanguage.APPLESCRIPT_LANGUAGE);
-                        } else {
-                            var body = 'dim objShell\rset objShell = CreateObject("Shell.Application")\rstr = "' + url + '"\robjShell.ShellExecute str, "", "", "open", 1 '
-                            app.doScript(body, ScriptLanguage.VISUAL_BASIC);
-                        }
-                    } else {
-                        linkJumper = File(Folder.temp.absoluteURI + "/link.html");
-                        linkJumper.open("w");
-                        var linkBody = '<html><head><META HTTP-EQUIV=Refresh CONTENT="0; URL=' + url + '"></head><body> <p></body></html>'
-                        linkJumper.write(linkBody);
-                        linkJumper.close();
-                        linkJumper.execute();
-                    }
-                } catch (e) {
-                    beep();
-                    prompt("Open your browser and visit the URL below for more information", url);
-                }
-            };
-
             function restoreDefaults() {
                 topCheckbox.value = false;
                 rightCheckbox.value = false;
@@ -1473,6 +1445,27 @@ function specifyObjects(inExtension) {
                     } else {
                         specifyDialogBox.close();
                     }
+                }
+            };
+
+            function openURLInBrowser(url) {
+                if (!url || url.trim() === '') {
+                    return
+                }
+
+                // Dispatch event to trigger csInterface link open
+                try {
+                    xLib = new ExternalObject("lib:PlugPlugExternalObject");
+                    if (xLib) {
+                        var eventObj = new CSXSEvent();
+                        eventObj.type = "com.adamdehaven.specify.openExternalLink";
+                        eventObj.data = url;
+                        eventObj.dispatch();
+                    }
+                } catch (e) {
+                    beep();
+                    $.writeln("Specify Error => openURLInBrowser: " + e)
+                    prompt("Open your browser and visit the URL below for more information", url);
                 }
             };
 
