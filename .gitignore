@@ -20,4 +20,4 @@ node_modules
 dist
 
 # Secure
-.p12
+*.p12
