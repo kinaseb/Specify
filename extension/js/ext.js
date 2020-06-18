@@ -41,15 +41,7 @@ function onLoaded() {
                 specifyButton.disabled = false;
             }
         }
-    });
 
-    // Respond to external link click
-    csInterface.addEventListener("com.adamdehaven.specify.openExternalLink", function (e) {
-        // Get URL
-        var url = e.data;
-        if (url) {
-            csInterface.openURLInDefaultBrowser(url);
-        }
     });
 
 }
