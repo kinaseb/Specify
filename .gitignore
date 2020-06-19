@@ -19,5 +19,8 @@ node_modules
 # Dist
 dist
 
+# exe
+*.exe
+
 # Secure
 *.p12
