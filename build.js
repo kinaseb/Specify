@@ -9,13 +9,5 @@ const zxpSignCmd = require('zxp-sign-cmd');
         password: process.env.SPECIFY_CERTIFICATE_PASSWORD,
         timestamp: 'http://time.certum.pl/',
     });
-
-    console.log(signResult)
-
-    const verifyResult = await zxpSignCmd.verify({
-        input: './Specify.zxp',
-        info: true,
-    });
-
-    console.log(verifyResult)
+    console.log(signResult);
 })()

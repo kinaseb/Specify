@@ -4,10 +4,14 @@
     "description": "Adobe Illustrator script and extension to automate specifying dimension measurements (and adding dimension lines) of single or multiple objects, and specifying the dimensions between two objects.",
     "main": "build.jsx",
     "scripts": {
-        "copy": "copyfiles ./Specify.jsx ./README.md ./CSXS/** ./extension/** LICENSE ./dist",
-        "prebuild": "del-cli --force ./dist && del-cli --force ./Specify.zxp && npm run copy",
-        "build": "node build.js --mode=production",
-        "postbuild": "del-cli --force ./dist"
+        "dist:delete": "del-cli ./dist",
+        "files:delete": "npm run dist:delete && del-cli ./Specify.zxp && del-cli ./Specify.p12",
+        "files:copy": "copyfiles ./Specify.jsx ./README.md ./CSXS/** ./extension/** LICENSE ./dist",
+        "generate:cert": "node cert.js",
+        "prebuild": "npm run files:delete && npm run files:copy && npm run generate:cert",
+        "build": "node build.js",
+        "verify": "node verify.js",
+        "postbuild": "npm run dist:delete && npm run verify"
     },
     "repository": {
         "type": "git",
