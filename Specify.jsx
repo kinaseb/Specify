@@ -15,7 +15,7 @@
 // Import colorPicker
 #include "./extension/lib/colorPicker.js"
 
-var specifyVersion = '2.0.2';
+var specifyVersion = '2.0.3';
 
 // Set variable to skip first run if running from extension (automatically closes specifyObject(false) called at bottom of JSX script)
 var skipFirstAutoRun = true;
@@ -78,7 +78,7 @@ function specifyObjects(inExtension) {
             var setGap = 4;
             var defaultGap = $.getenv("Specify_defaultGap") ? $.getenv("Specify_defaultGap") : setGap;
             // Stroke width
-            var setStrokeWidth = 0.5;
+            var setStrokeWidth = 1;
             var defaultStrokeWidth = $.getenv("Specify_defaultStrokeWidth") ? $.getenv("Specify_defaultStrokeWidth") : setStrokeWidth;
             // Head Tail Size
             var setHeadTailSize = 6;
