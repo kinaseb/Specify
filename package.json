@@ -1,6 +1,6 @@
 {
     "name": "specify",
-    "version": "2.0.3",
+    "version": "2.0.2",
     "description": "Adobe Illustrator script and extension to automate specifying dimension measurements (and adding dimension lines) of single or multiple objects, and specifying the dimensions between two objects.",
     "main": "build.jsx",
     "scripts": {
