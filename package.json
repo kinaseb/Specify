@@ -1,0 +1,31 @@
+{
+    "name": "specify",
+    "version": "2.0.2",
+    "description": "Adobe Illustrator script and extension to automate specifying dimension measurements (and adding dimension lines) of single or multiple objects, and specifying the dimensions between two objects.",
+    "main": "Specify.jsx",
+    "scripts": {
+        "prebuild": "del-cli --force ./dist",
+        "build": "copyfiles ./Specify.jsx ./README.md ./CSXS/** ./extension/** LICENSE ./dist"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/adamdehaven/Specify.git"
+    },
+    "keywords": [
+        "specify",
+        "illustrator",
+        "dimension",
+        "spec",
+        "measure"
+    ],
+    "author": "Adam DeHaven <adam@dehaven.org>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/adamdehaven/Specify/issues"
+    },
+    "homepage": "https://github.com/adamdehaven/Specify#readme",
+    "dependencies": {
+        "copyfiles": "^2.3.0",
+        "del-cli": "^3.0.1"
+    }
+}
