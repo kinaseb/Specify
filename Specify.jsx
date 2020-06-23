@@ -11,11 +11,11 @@
  */
 // Name script
 #script "Specify"
-#includepath "./extension/lib"
+#includepath "./ext/lib"
 // Import colorPicker
-#include "./extension/lib/colorPicker.js"
+#include "./ext/lib/colorPicker.js"
 
-var specifyVersion = '2.0.3';
+var specifyVersion = '2.0.4';
 
 // Set variable to skip first run if running from extension (automatically closes specifyObject(false) called at bottom of JSX script)
 var skipFirstAutoRun = true;
