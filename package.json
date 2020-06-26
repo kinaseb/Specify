@@ -8,7 +8,7 @@
         "files:delete": "npm run dist:delete && del-cli ./Specify.zxp && del-cli ./Specify.p12",
         "files:copy": "copyfiles ./Specify.jsx ./README.md ./CSXS/** ./ext/** LICENSE ./dist",
         "cert:generate": "node ./ext/js/cert.js",
-        "prebuild": "npm run files:delete && npm run files:copy && npm run cert:generate",
+        "prebuild": "npm run files:delete && npm run files:copy && del-cli ./dist/ext/img/assets.ai && npm run cert:generate",
         "build": "node ./ext/js/build.js",
         "cert:verify": "node ./ext/js/verify.js",
         "postbuild": "npm run dist:delete && npm run cert:verify"
