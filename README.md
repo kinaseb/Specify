@@ -2,7 +2,7 @@
 
 Adobe Illustrator script and extension to automate specifying dimension measurements (and adding dimension lines) of single or multiple objects, and specifying the dimensions between two objects.
 
-![specify-example](img/specify-example.jpg)
+![specify-example](ext/img/featured.png)
 
 ## Installation
 
