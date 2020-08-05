@@ -35,7 +35,7 @@
 
 ### Fixes
 
-- The font size input in the options panel now allows the user to specify the size of the label text in the same units as the document ruler. Closes issue #9.
+- The font size input in the options panel now allows the user to specify the size of the label text in the same units as the document ruler. 
 - Fixes a bug with the help text that appears when hovering over an input field in the Specify dialog box. Help text was showing the current settings as Defaults rather than the script's default values.
 
 ## 1.2.0
@@ -53,7 +53,7 @@
 
 ### New Features
 
-- Now possible to specify multiple objects simultaneously. (Closes #3)
+- Now possible to specify multiple objects simultaneously. 
 - Added 'Select All' option to easily select all dimensions to specify.
 - Added 'Advanced Options' panel:
   - Easily change font size.
