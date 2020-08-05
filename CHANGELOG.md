@@ -11,7 +11,8 @@
 
 ### New Features
 
-- **New Dialog UI and Adobe Extension**: Completely updates the Specify dialog UI, and adds a version packaged as [Free Extension available via Adobe Exchange](https://exchange.adobe.com/creativecloud.details.104123.specify.html) for Illustrator CC users.
+- Completely updated the Specify dialog UI
+- **New Dialog UI and Adobe Extension**: Added a version packaged as a [Free Creative Cloud Extension available via Adobe Exchange](https://exchange.adobe.com/creativecloud.details.104123.specify.html) for Illustrator CC users.
 
 ## 1.3.1
 
